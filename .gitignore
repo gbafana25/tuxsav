@@ -1,0 +1,10 @@
+# C++
+main
+
+# Django
+*.sqlite3
+env/
+*.log
+*.pyc
+__pycache__/
+

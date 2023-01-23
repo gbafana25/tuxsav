@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<head>
+	<title>Dashboard</title>
+</head>
+
+
+<nav>
+	<h1>Hello, {{ user.get_username  }}</h1>		
+	<p><a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></p>
+</nav>
+
+<body>
+	{% for d in docs %}
+		<h3>{{ d.title }}</h3>
+		<p>{{ d.text }}</p>
+	{% endfor %}
+</body>
+
