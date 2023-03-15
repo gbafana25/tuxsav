@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 import uuid
 import json
+from . import serv
 
 from .forms import LoginForm
 from .forms import SignupForm 
@@ -49,14 +50,17 @@ def dashboard(request):
 @csrf_exempt
 def update(request):
 	jbody = json.loads(request.body.decode('utf-8'))
-	try:
-		chk = ApiUser.objects.get(key=jbody['key'])	
-		u = User.objects.get(username=jbody['username'])
+	if(serv.check_api_key(jbody["key"])):
 		print("key verified")
+		au = ApiUser.objects.get(name=jbody['username'])
+		u = User.objects.get(username=au.name)
 		doc = Document.objects.get(owner=u, title=jbody['doc_name'])
-		print(doc.text)
-		return HttpResponse("Success")
-	except:
-		print("doesn't exist")
+		doc.text = jbody["data"]
+		doc.save()
+
+		return HttpResponse(serv.success)
 	
-	return HttpResponse("Failure")
+	else:
+		return HttpResponse(serv.failure)
+
+

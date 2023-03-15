@@ -7,6 +7,7 @@ class Client {
 	CURLcode res;
 	std::string url;
 	std::string buf;
+	std::string username;
 
 
 	Client();
