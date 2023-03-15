@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 import uuid
+import json
 
 from .forms import LoginForm
 from .forms import SignupForm 
@@ -47,6 +48,15 @@ def dashboard(request):
 
 @csrf_exempt
 def update(request):
-	#print(request.method)
-	print(request.body.decode('utf-8'))
-	return HttpResponse("test")
+	jbody = json.loads(request.body.decode('utf-8'))
+	try:
+		chk = ApiUser.objects.get(key=jbody['key'])	
+		u = User.objects.get(username=jbody['username'])
+		print("key verified")
+		doc = Document.objects.get(owner=u, title=jbody['doc_name'])
+		print(doc.text)
+		return HttpResponse("Success")
+	except:
+		print("doesn't exist")
+	
+	return HttpResponse("Failure")

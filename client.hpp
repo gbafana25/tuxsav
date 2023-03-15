@@ -10,5 +10,5 @@ class Client {
 
 
 	Client();
-	void update(std::string);
+	void update(std::string, std::string, std::string);
 };

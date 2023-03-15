@@ -31,13 +31,22 @@ Client::Client() {
 }
 
 
-void Client::update(std::string data) {
+void Client::update(std::string key, std::string data, std::string name) {
 	this->url = "http://localhost:8000/update/";
+	json fields;
+	struct curl_slist *hd = NULL;
+	fields["key"] = key;
+	fields["data"] = data;
+	fields["doc_name"] = name;
+	fields["username"] = "test";
+	std::string fstr = fields.dump(4);
+	hd = curl_slist_append(hd, "Content-Type: application/json");
+	curl_easy_setopt(this->client, CURLOPT_HTTPHEADER, hd);
 
 	curl_easy_setopt(this->client, CURLOPT_URL, this->url.c_str());
 	curl_easy_setopt(this->client, CURLOPT_POST, 1L);
 	curl_easy_setopt(this->client, CURLOPT_POSTFIELDSIZE, -1L);
-	curl_easy_setopt(this->client, CURLOPT_POSTFIELDS, data.c_str());
+	curl_easy_setopt(this->client, CURLOPT_POSTFIELDS, fstr.c_str());
 	this->res = curl_easy_perform(this->client);
 	curl_easy_cleanup(this->client);
 	std::cout << this->buf << std::endl;

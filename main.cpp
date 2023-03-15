@@ -8,9 +8,10 @@
 
 
 int main() {
+	// hardcode key
 	std::cout << "Starting savebox.." << std::endl;
 	Client cl;
-	cl.update("test string");
+	cl.update("10c5b69e-0a4d-4898-bfaf-02d1b78a1718", "test string", "test2");
 	//TermSettings term;
 	//Editor ed;
 	//term.setupTerminal();
