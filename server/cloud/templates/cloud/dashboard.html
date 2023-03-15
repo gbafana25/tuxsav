@@ -10,6 +10,8 @@
 	<p><a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></p>
 </nav>
 
+<h2>API key: {{ key }}</h2>
+
 <body>
 	{% for d in docs %}
 		<h3>{{ d.title }}</h3>

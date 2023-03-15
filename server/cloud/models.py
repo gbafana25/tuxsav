@@ -1,6 +1,8 @@
 from django.db import models
+import uuid
 from django.utils import timezone
 from django.conf import settings
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Document(models.Model):
@@ -11,5 +13,10 @@ class Document(models.Model):
 
 	def __str__(self):
 		return self.title
+
+class ApiUser(models.Model):	
+	name = models.CharField(primary_key=True, max_length=100)
+	key = models.UUIDField(primary_key=False, default=uuid.uuid4, editable=True, null=True)
+
 	
-	
+

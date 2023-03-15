@@ -9,14 +9,14 @@
 
 int main() {
 	std::cout << "Starting savebox.." << std::endl;
-	//Client cl;
-	TermSettings term;
-	Editor ed;
-	term.setupTerminal();
-	//cl.connectToServer();
-	//cl.sendData("test string\n");
-	ed.inputLoop();	
+	Client cl;
+	cl.update("test string");
+	//TermSettings term;
+	//Editor ed;
+	//term.setupTerminal();
+	//ed.inputLoop();	
 	//std::cout << ed.buffer << std::endl;
-	term.resetTerminal();
+	//term.resetTerminal();
+	
 
 }

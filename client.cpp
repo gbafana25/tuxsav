@@ -1,32 +1,45 @@
 #include <sys/types.h>
 #include <unistd.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+#include <iostream>
 #include <string>
 #include <cstring>
+#include <curl/curl.h>
+
 
 #include "client.hpp"
+#include "json/json.hpp"
+
+using json = nlohmann::json_abi_v3_11_2::json;
+
+static size_t write_callback(void *raw, size_t size, size_t nmemb, void *d) {
+	((std::string*)d)->append((char*)raw, size * nmemb);
+	return size * nmemb;
+
+}
 
 Client::Client() {
-	int o = 1;
-	this->soc = socket(AF_INET, SOCK_STREAM, 0);
-	setsockopt(this->soc, SOL_SOCKET, SO_REUSEADDR, &o, sizeof(o));
-	this->cli.sin_family = AF_INET;
-	this->cli.sin_port = htons(8080);
-	//this->cli.sin_addr.s_addr = htonl(INADDR_ANY);
-	inet_pton(AF_INET, "127.0.0.1", &this->cli.sin_addr);
-	this->len = sizeof(this->cli);
+	this->client = curl_easy_init();
+
+	if(this->client) {
+		curl_easy_setopt(this->client, CURLOPT_URL, this->url.c_str());
+		curl_easy_setopt(this->client, CURLOPT_WRITEFUNCTION, write_callback);
+		curl_easy_setopt(this->client, CURLOPT_FOLLOWLOCATION, 1);
+		curl_easy_setopt(this->client, CURLOPT_WRITEDATA, &this->buf);
+
+	}
 
 }
 
-void Client::connectToServer() {
-	connect(this->soc, (struct sockaddr *) &this->cli, this->len);
-	
-}
 
-void Client::sendData(std::string d) {
-	const char *s = d.c_str();
-	send(this->soc, s, strlen(s), 0);
-	
+void Client::update(std::string data) {
+	this->url = "http://localhost:8000/update/";
+
+	curl_easy_setopt(this->client, CURLOPT_URL, this->url.c_str());
+	curl_easy_setopt(this->client, CURLOPT_POST, 1L);
+	curl_easy_setopt(this->client, CURLOPT_POSTFIELDSIZE, -1L);
+	curl_easy_setopt(this->client, CURLOPT_POSTFIELDS, data.c_str());
+	this->res = curl_easy_perform(this->client);
+	curl_easy_cleanup(this->client);
+	std::cout << this->buf << std::endl;
+
 }

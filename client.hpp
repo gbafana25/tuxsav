@@ -1,16 +1,14 @@
-#include <sys/socket.h>
-#include <netinet/in.h>
+#include <curl/curl.h>
 
 class Client {
 	public:
+	
+	CURL *client;
+	CURLcode res;
+	std::string url;
+	std::string buf;
 
-	int soc;
-	struct sockaddr_in cli;
-	socklen_t len;
-	int acc;
-	char b[128]; // needed?
 
 	Client();
-	void connectToServer();
-	void sendData(std::string); 
+	void update(std::string);
 };

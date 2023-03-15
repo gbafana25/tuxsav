@@ -2,10 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import User 
 from django.contrib.auth.decorators import login_required 
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+import uuid
 
 from .forms import LoginForm
 from .forms import SignupForm 
-from .models import Document
+from .models import Document, ApiUser 
 
 # Create your views here.
 def home(request):
@@ -15,26 +18,6 @@ def signout(request):
 	logout(request)
 	return render(request, 'cloud/home.html', {})
 
-"""
-def login(request):
-	if request.method == 'POST':
-		if request.user.is_authenticated == False:
-			login_form = LoginForm(request.POST)
-			if login_form.is_valid():
-				usr = authenticate(username=login_form.cleaned_data['username'], password=login_form.cleaned_data['password'])
-				if usr is not None:
-					#return render(request, 'cloud/dashboard.html', {})
-					print(request.user)
-					return redirect('/dashboard/')
-		else:	
-			if request.user.is_authenticated == True:
-				#return render(request, 'cloud/dashboard.html', {})
-				return redirect('/dashboard/')
-	else:
-		login_form = LoginForm()
-	return render(request, 'cloud/login.html', {'form':login_form})
-"""
-
 def signup(request):
 	if request.method == 'POST':
 		su_form = SignupForm(request.POST)
@@ -43,7 +26,12 @@ def signup(request):
 		if su_form.is_valid():
 			usr = User.objects.create_user(su_form.cleaned_data['username'], su_form.cleaned_data['email'], su_form.cleaned_data['password'])
 			usr.save()
-			redirect('')
+			aobj = ApiUser.objects.create(name=su_form.cleaned_data['username'])
+			aobj.key = uuid.uuid4()
+	
+			aobj.save()
+			print(aobj.name, aobj.key)
+			redirect('/')
 
 	else:
 		su_form = SignupForm()
@@ -53,5 +41,12 @@ def signup(request):
 @login_required
 def dashboard(request):
 	docs = Document.objects.filter(owner=request.user)
+	akobj = ApiUser.objects.get(name=request.user)
 	#print(docs[0].text, docs[1].text)
-	return render(request, 'cloud/dashboard.html', {'docs':docs})
+	return render(request, 'cloud/dashboard.html', {'docs':docs, 'key':akobj.key})
+
+@csrf_exempt
+def update(request):
+	#print(request.method)
+	print(request.body.decode('utf-8'))
+	return HttpResponse("test")
