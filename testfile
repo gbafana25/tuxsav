@@ -1,8 +1,5 @@
-#!/save
-asdf
-asdfk
-test
-break test
+#!/bin/bash
 
+# test script for savebox
+echo "38/50" | bc
 
-asdkkfsdkk

@@ -1,6 +1,7 @@
 # C++
 main
 *.swp
+config.json
 
 # Django
 *.sqlite3

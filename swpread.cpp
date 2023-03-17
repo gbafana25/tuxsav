@@ -3,6 +3,9 @@
 #include <ostream>
 
 #include "swpread.hpp"
+#include "json/json.hpp"
+
+using json = nlohmann::json_abi_v3_11_2::json;
 
 VSReader::VSReader() {}
 
@@ -54,6 +57,16 @@ void VSReader::get_final() {
 		this->raw.append(l);
 		this->raw += "\n";
 	}
+
+
+}
+
+json VSReader::load_config() {
+	std::ifstream con("config.json");
+	json j;
+	j = json::parse(con);
+	//std::cout << j << std::endl;
+	return j;
 
 
 }

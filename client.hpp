@@ -1,5 +1,6 @@
 #include <curl/curl.h>
 
+
 class Client {
 	public:
 	
@@ -12,4 +13,5 @@ class Client {
 
 	Client();
 	void update(std::string, std::string, std::string);
+	
 };

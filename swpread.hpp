@@ -1,4 +1,7 @@
 #include <fstream>
+#include "json/json.hpp"
+
+using json = nlohmann::json_abi_v3_11_2::json;
 
 class VSReader {
 	public:
@@ -9,5 +12,6 @@ class VSReader {
 	VSReader();
 	bool read_raw();
 	void get_final();
+	json load_config();
 
 };

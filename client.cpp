@@ -56,3 +56,5 @@ void Client::update(std::string key, std::string data, std::string name) {
 	std::cout << rp["status"] << std::endl;
 
 }
+
+
