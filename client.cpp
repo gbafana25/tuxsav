@@ -11,6 +11,7 @@
 
 using json = nlohmann::json_abi_v3_11_2::json;
 
+
 static size_t write_callback(void *raw, size_t size, size_t nmemb, void *d) {
 	((std::string*)d)->append((char*)raw, size * nmemb);
 	return size * nmemb;
@@ -50,6 +51,7 @@ void Client::update(std::string key, std::string data, std::string name) {
 	this->res = curl_easy_perform(this->client);
 	curl_easy_cleanup(this->client);
 
+	//std::cout << this->buf << std::endl;
 	json rp = json::parse(this->buf);
 	std::cout << rp["status"] << std::endl;
 

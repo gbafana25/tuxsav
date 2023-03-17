@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import User 
 from django.contrib.auth.decorators import login_required 
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import uuid
 import json
 from . import serv
@@ -58,9 +58,9 @@ def update(request):
 		doc.text = jbody["data"]
 		doc.save()
 
-		return HttpResponse(serv.success)
+		return HttpResponse(serv.success(), content_type="application/json")
 	
 	else:
-		return HttpResponse(serv.failure)
+		return HttpResponse(serv.fail(), content_type="application/json")
 
 
