@@ -1,5 +1,9 @@
-#!/bin/bash
+#!/usr/bin/python3
 
-# test script for savebox
-echo "38/50" | bc
+print("Hello, world")
 
+def test():
+	os.system("ls")
+
+if __name__ == "__main__":
+	test()

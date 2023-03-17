@@ -59,10 +59,10 @@ int main(int argc, char **argv) {
 
 			// file has been closed, submit final copy to server
 			Client f;
-			f.username = "test";
+			f.username = co["username"];
 			vr.get_final();
 			std::cout << vr.raw << std::endl;
-			f.update("10c5b69e-0a4d-4898-bfaf-02d1b78a1718", vr.raw, "testdoc");
+			f.update(co["key"], vr.raw, argv[2]);
 
 
 			return 0;
