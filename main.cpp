@@ -21,9 +21,10 @@ int main() {
 	Editor ed;
 	term.setupTerminal();
 	ed.inputLoop();	
-	std::cout << ed.buffer << std::endl;
+	std::cout << ed.buffer[0] << std::endl;
 	term.resetTerminal();
 	*/
+	
 
 	VSReader vr;
 	vr.read_raw();

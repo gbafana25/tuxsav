@@ -10,4 +10,4 @@
 
 ## TODO:
 - store cursor position (start at 0,0 when program starts, increment/decrement when moving)
-- for reading vim swp, require shebang at beginning of file to find start of data
+- detect when file closes, then send final copy of file to server (swp file leaves artifacts behind sometimes)
