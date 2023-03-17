@@ -27,8 +27,14 @@ int main() {
 	
 
 	VSReader vr;
-	vr.read_raw();
-	
+	while(vr.read_raw()) {
+		//std::cout << vr.raw << std::endl;
+		// keep updating, w/ delay
+	}
+
+	// file has been closed, submit final copy to server
+	vr.get_final();
 	std::cout << vr.raw << std::endl;
+	
 
 }

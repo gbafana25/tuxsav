@@ -1,9 +1,13 @@
+#include <fstream>
+
 class VSReader {
 	public:
 
 	std::string raw;
+	std::ifstream swp;
 
 	VSReader();
-	void read_raw();
+	bool read_raw();
+	void get_final();
 
 };

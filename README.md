@@ -10,4 +10,3 @@
 
 ## TODO:
 - store cursor position (start at 0,0 when program starts, increment/decrement when moving)
-- detect when file closes, then send final copy of file to server (swp file leaves artifacts behind sometimes)
