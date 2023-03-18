@@ -9,11 +9,14 @@ using json = nlohmann::json_abi_v3_11_2::json;
 
 VSReader::VSReader() {}
 
-bool VSReader::read_raw() {
+bool VSReader::read_raw(std::string base) {
 	std::string n;
+	std::string full = ".";
 	char c;
 	int start = 0;
-	this->swp.open(".testfile.swp");
+	full.append(base);
+	full.append(".swp");
+	this->swp.open(full);
 	if(!this->swp.is_open()) {
 		return false;
 	}
@@ -48,11 +51,11 @@ bool VSReader::read_raw() {
 
 }
 
-void VSReader::get_final() {
+void VSReader::get_final(std::string path) {
 	std::ifstream fin;
 	this->raw.clear();
 	std::string l;
-	fin.open("testfile");
+	fin.open(path);
 	while(getline(fin, l)) {
 		this->raw.append(l);
 		this->raw += "\n";

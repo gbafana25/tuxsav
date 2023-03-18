@@ -10,8 +10,8 @@ class VSReader {
 	std::ifstream swp;
 
 	VSReader();
-	bool read_raw();
-	void get_final();
+	bool read_raw(std::string);
+	void get_final(std::string);
 	json load_config();
 
 };

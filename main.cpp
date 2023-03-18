@@ -15,7 +15,8 @@ using json = nlohmann::json_abi_v3_11_2::json;
 
 void start_dialog() {
 	std::cout << "-s : run setup dialog" << std::endl;
-	std::cout << "-i [document]: initialize backup daemon" << std::endl;
+	std::cout << "-i [document] [local file]: initialize backup daemon" << std::endl;
+	std::cout << "-c [document] : create document on server" << std::endl;
 	std::cout << "-h : display this help menu" << std::endl;	
 }
 
@@ -45,11 +46,11 @@ int main(int argc, char **argv) {
 		if(strcmp(argv[1],"-s") == 0) {
 			run_setup();
 			return 0;
-		} else if(strcmp(argv[1],"-i") == 0 && argc == 3) {
+		} else if(strcmp(argv[1],"-i") == 0 && argc == 4) {
 		
 			VSReader vr;
 			json co = vr.load_config();
-			while(vr.read_raw()) {
+			while(vr.read_raw(argv[3])) {
 				// keep updating, w/ delay
 				Client cl;
 				cl.username = co["username"];
@@ -60,12 +61,18 @@ int main(int argc, char **argv) {
 			// file has been closed, submit final copy to server
 			Client f;
 			f.username = co["username"];
-			vr.get_final();
+			vr.get_final(argv[3]);
 			std::cout << vr.raw << std::endl;
 			f.update(co["key"], vr.raw, argv[2]);
 
 
 			return 0;
+		} else if(strcmp(argv[1],"-c") == 0 && argc == 4) {
+			Client c;
+			VSReader vr;
+			json co = vr.load_config();
+			c.username = co["username"];
+			c.create(co["key"], argv[2]);
 		}
 	}
 	

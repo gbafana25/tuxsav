@@ -13,5 +13,6 @@ class Client {
 
 	Client();
 	void update(std::string, std::string, std::string);
+	void create(std::string, std::string);
 	
 };

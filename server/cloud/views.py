@@ -49,6 +49,9 @@ def dashboard(request):
 
 @csrf_exempt
 def update(request):
+	if request.method != 'POST':
+		return HttpResponse(serv.fail())
+
 	jbody = json.loads(request.body.decode('utf-8'))
 	if(serv.check_api_key(jbody["key"])):
 		print("key verified")
@@ -64,3 +67,16 @@ def update(request):
 		return HttpResponse(serv.fail(), content_type="application/json")
 
 
+@csrf_exempt
+def create(request):	
+	jbody = json.loads(request.body.decode('utf-8'))
+	print(jbody)
+	if(serv.check_api_key(jbody["key"])):
+		au = ApiUser.objects.get(name=jbody['username'])
+		u = User.objects.get(username=au.name)
+		doc = Document.objects.create(owner=u, title=jbody["doc_name"])
+		doc.save()
+
+		return HttpResponse(serv.success(), content_type="application/json")
+	else:
+		return HttpResponse(serv.fail(), content_type="application/json")
