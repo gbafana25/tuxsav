@@ -16,6 +16,9 @@ from .models import Document, ApiUser
 def home(request):
 	return render(request, 'cloud/home.html', {})
 
+def setup_guide(request):
+	return render(request, 'cloud/setup-guide.html', {})
+
 def signout(request):
 	logout(request)
 	return render(request, 'cloud/home.html', {})
@@ -80,3 +83,4 @@ def create(request):
 		return HttpResponse(serv.success(), content_type="application/json")
 	else:
 		return HttpResponse(serv.fail(), content_type="application/json")
+

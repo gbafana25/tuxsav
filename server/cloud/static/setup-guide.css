@@ -34,34 +34,9 @@ footer {
 	padding-top: 50px;
 	padding-left: 90px;
 	padding-right: 90px;
+	margin-right: 80px;
 	font-size: 20px;
 }
-
-.setup-link { 
-	color: blue;
-}
-
-.lang-list {
-	text-align: center;
-	padding-top: 50px;
-	padding-left: 90px;
-	padding-right: 90px;
-	font-size: 25px;
-	list-style: none;
-}
-
-.title {	
-	text-align: center;
-	font-weight: bold;
-	padding-bottom: 40px;
-}
-
-.under-msg {
-	text-align: center;
-	padding-bottom: 80px;
-
-}
-
 
 .section-heading {
 	text-align: left;
@@ -69,25 +44,3 @@ footer {
 	font-style: italic;
 	color: #969387;
 }
-
-
-.lform {
-	text-align: center;
-	padding-top: 60px;
-	display: block;
-
-}
-
-.submit-btn {
-	color: #969387;
-	border: solid 2px;
-	
-
-}
-
-.btnbox {
-	padding: 30px;
-	margin-left: 150px;
-}
-
-
