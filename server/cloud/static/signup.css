@@ -39,10 +39,16 @@ header {
 }
 
 .submit-btn {
-	color: #969387;
-	border: solid 2px;
-	
+	color: #ffffff;	
+	border: solid 2px #111173;	
+	transition-duration: 0.5s;
+	background-color: #5263ff;
 
+}
+
+.submit-btn:hover {
+	background-color: #111173;
+	color: #ffffff;
 }
 
 .btnbox {

@@ -21,6 +21,7 @@ footer {
 	text-align: center;
 	text-decoration: none;
 	background-color: #f0f0f0;
+	color: #969387;
 }
 
 .foot-link {
@@ -34,6 +35,15 @@ footer {
 	padding-left: 90px;
 	padding-right: 90px;
 	font-size: 20px;
+}
+
+.lang-list {
+	text-align: center;
+	padding-top: 50px;
+	padding-left: 90px;
+	padding-right: 90px;
+	font-size: 25px;
+	list-style: none;
 }
 
 .title {	

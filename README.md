@@ -19,5 +19,5 @@ The client is written in C++, and sends data to the server every four seconds
 
 ## TODO:
 - server checks if request method is correct
-
+- try different lengths for substring in `swpread.cpp`
 
