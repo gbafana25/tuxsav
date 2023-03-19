@@ -13,6 +13,17 @@ header {
 	font-size: 20px;
 }
 
+footer {
+	text-align: center;
+	text-decoration: none;
+	background-color: #f0f0f0;
+	color: #969387;
+}
+
+.foot-link {
+	color: #969387;
+}
+
 .title {	
 	color: #969387;
 }
@@ -36,6 +47,7 @@ header {
 
 .login-input {
 	font-size: 20px;
+	color: #000000;
 }
 
 .submit-btn {
@@ -43,6 +55,7 @@ header {
 	border: solid 2px #111173;	
 	transition-duration: 0.5s;
 	background-color: #5263ff;
+	border-radius: 8px;
 
 }
 

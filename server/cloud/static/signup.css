@@ -17,6 +17,17 @@ header {
 	color: #969387;
 }
 
+footer {
+	text-align: center;
+	text-decoration: none;
+	background-color: #f0f0f0;
+	color: #969387;
+}
+
+.foot-link {
+	color: #969387;
+}
+
 .top-link {
 	text-decoration: none;
 	color: #ffffff;
@@ -43,6 +54,7 @@ header {
 	border: solid 2px #111173;	
 	transition-duration: 0.5s;
 	background-color: #5263ff;
+	border-radius: 8px;
 
 }
 
