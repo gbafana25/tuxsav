@@ -24,10 +24,13 @@ LOGIN_REDIRECT_URL = '/dashboard'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-a%_7-!#y1kr4s)ohx3n=_e4$*#7=k+2qc792=$=2$b93bn7nqo'
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
+STATIC_URL = "static/"
 
 
 # Application definition

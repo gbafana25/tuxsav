@@ -1,0 +1,79 @@
+* {
+	font-family: "Share Tech Mono", monospace;
+	padding: 10px;
+
+}
+
+a {
+	text-decoration: none;
+	color: #ffffff;
+}
+
+header {
+	background-color: #111173;
+	padding-left: 0;
+	text-align: right;
+	font-size: 20px;
+	color: #ffffff;
+}
+
+footer {
+	text-align: center;
+	text-decoration: none;
+	background-color: #f0f0f0;
+}
+
+.foot-link {
+	color: #969387;
+}
+
+
+.description {
+	text-align: center;
+	padding-top: 50px;
+	padding-left: 90px;
+	padding-right: 90px;
+	font-size: 20px;
+}
+
+.title {	
+	text-align: center;
+	font-weight: bold;
+	padding-bottom: 40px;
+}
+
+.under-msg {
+	text-align: center;
+	padding-bottom: 80px;
+
+}
+
+
+.section-heading {
+	text-align: left;
+	font-weight: bold;
+	font-style: italic;
+	color: #969387;
+}
+
+
+.lform {
+	text-align: center;
+	padding-top: 60px;
+	display: block;
+
+}
+
+.submit-btn {
+	color: #969387;
+	border: solid 2px;
+	
+
+}
+
+.btnbox {
+	padding: 30px;
+	margin-left: 150px;
+}
+
+

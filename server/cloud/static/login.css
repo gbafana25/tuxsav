@@ -1,0 +1,56 @@
+* {
+	font-family: "Share Tech Mono", monospace;
+	padding: 10px;
+	color: #ffffff;
+
+}
+
+
+header {
+	background-color: #111173;
+	padding-left: 0;
+	text-align: right;
+	font-size: 20px;
+}
+
+.title {	
+	color: #969387;
+}
+
+.top-link {
+	text-decoration: none;
+	color: #ffffff;
+}
+
+.lform {
+	text-align: center;
+	padding-top: 60px;
+	display: block;
+
+}
+
+.login-label {
+	font-size: 30px;
+	color: #969387;
+}
+
+.login-input {
+	font-size: 20px;
+}
+
+.submit-btn {
+	color: #969387;
+	border: solid 2px;
+	
+
+}
+
+.btnbox {
+	padding: 30px;
+	margin-left: 150px;
+}
+
+.signup-link {
+	text-decoration: none;
+	color: #969387;
+}

@@ -23,7 +23,7 @@ bool VSReader::read_raw(std::string base) {
 	this->raw.clear();
 	// check if valid letter, num space till hits offset
 	getline(this->swp, n);
-	// swp file indices range in 1000's, try different starting sizes 
+	// TODO: swp file indices range in 1000's, try different starting sizes 
 	
 	std::string sub = n.substr(n.size()-100, n.size());
 	// reverse order of lines, not each character
