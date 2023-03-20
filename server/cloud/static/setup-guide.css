@@ -12,6 +12,8 @@ a {
 header {
 	background-color: #111173;
 	padding-left: 0;
+	display: flex;
+	justify-content: right;
 	text-align: right;
 	font-size: 20px;
 	color: #ffffff;
@@ -22,6 +24,12 @@ footer {
 	text-decoration: none;
 	background-color: #f0f0f0;
 	color: #969387;
+}
+
+code {
+	background-color: #f2f2f2;
+	color: #bf022e; 
+	padding: 2px;
 }
 
 .foot-link {
@@ -46,4 +54,46 @@ footer {
 	font-weight: bold;
 	font-style: italic;
 	color: #969387;
+}
+
+.login-btn {
+	color: #ffffff;
+	border: solid 2px #111173;	
+	transition-duration: 0.5s;
+	background-color: #5263ff;
+	border-radius: 8px;
+
+}
+
+.login-btn:hover {
+	background-color: #ffffff;
+	color: #111173;
+}
+
+.signup-btn {
+	color: #111173;
+	border: solid 2px #111173;	
+	transition-duration: 0.5s;
+	background-color: #ffffff;
+	border-radius: 8px;
+
+}
+
+.signup-btn:hover {
+	background-color: #111173;
+	color: #ffffff;
+}
+
+.home-btn {
+	color: #ffffff;
+	border: solid 2px #d68427;	
+	transition-duration: 0.5s;
+	background-color: #d68427;
+	border-radius: 8px;
+
+}
+
+.home-btn:hover {
+	background-color: #ffffff;
+	color: #d68427;
 }

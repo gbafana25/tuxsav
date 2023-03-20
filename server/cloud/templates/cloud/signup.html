@@ -7,7 +7,12 @@
 {% load static %}
 <link rel="stylesheet" href={% static "signup.css" %}/>
 
-<header><a class="top-link" href="/">Home</a></header>
+<header>
+	<form action="/" method="post">
+	{% csrf_token %}
+	<button class="home-btn" type="submit">Home</button>
+	</form>
+</header>
 
 <h1 class="title">Create an account</h1>
 

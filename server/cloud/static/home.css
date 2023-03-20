@@ -11,7 +11,9 @@ a {
 
 header {
 	background-color: #111173;
-	padding-left: 0;
+	display: flex;
+	justify-content: right;
+	padding-left: 20px;
 	text-align: right;
 	font-size: 20px;
 	color: #ffffff;
@@ -91,3 +93,45 @@ footer {
 }
 
 
+.login-btn {
+	color: #ffffff;
+	border: solid 2px #111173;	
+	transition-duration: 0.5s;
+	background-color: #5263ff;
+	border-radius: 8px;
+
+}
+
+.login-btn:hover {
+	background-color: #ffffff;
+	color: #111173;
+}
+
+.signup-btn {
+	color: #111173;
+	border: solid 2px #111173;	
+	transition-duration: 0.5s;
+	background-color: #ffffff;
+	border-radius: 8px;
+
+}
+
+.signup-btn:hover {
+	background-color: #111173;
+	color: #ffffff;
+}
+
+.dash-btn {
+	margin-right: 100px;
+	transition-duration: 0.5s;
+	border-radius: 8px;
+	border: solid 2px #50b033;
+	background-color: #50b033;
+	color: #ffffff;
+
+}
+
+.dash-btn:hover {
+	background-color: #ffffff;
+	color: #50b033;
+}

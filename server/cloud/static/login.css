@@ -74,3 +74,17 @@ footer {
 	text-decoration: none;
 	color: #969387;
 }
+
+.home-btn {
+	color: #ffffff;
+	border: solid 2px #d68427;	
+	transition-duration: 0.5s;
+	background-color: #d68427;
+	border-radius: 8px;
+
+}
+
+.home-btn:hover {
+	background-color: #ffffff;
+	color: #d68427;
+}

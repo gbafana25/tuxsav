@@ -6,7 +6,21 @@
 
 <title>Tuxsav</title>
 
-<header><a href="/accounts/login">Login</a> <a href="/signup">Signup</a></header>
+<header>
+	<form action="{% url 'dashboard' %}?next={{ request.path }}" method="post">
+	{% csrf_token %}
+	<button class="dash-btn" type="submit">Dashboard</button>
+	</form>
+	<form action="{% url 'login' %}?next={{ request.path }}" method="post">
+	{% csrf_token %}
+	<button class="login-btn" type="submit">Login</button>
+	</form>
+	<form action="{% url 'signup' %}?next={{ request.path }}" method="post">
+	{% csrf_token %}
+	<button class="signup-btn" type="submit">Signup</button>
+	</form>
+
+</header>
 
 <body>
 	<h1 class="title">Tuxsav</h1>	

@@ -6,14 +6,28 @@
 
 <title>Tuxsav</title>
 
-<header><a href="/">Home</a> <a href="/accounts/login">Login</a> <a href="/signup">Signup</a></header>
+<header>
+	<form action="/" method="post">
+	{% csrf_token %}
+	<button class="home-btn" type="submit">Home</button>
+	</form>
+	<form action="{% url 'login' %}?next={{ request.path }}" method="post">
+	{% csrf_token %}
+	<button class="login-btn" type="submit">Login</button>
+	</form>
+	<form action="{% url 'signup' %}?next={{ request.path }}" method="post">
+	{% csrf_token %}
+	<button class="signup-btn" type="submit">Signup</button>
+	</form>
+
+</header>
 
 <body>
 	<h1 class="title">Getting started guide</h1>
 	<h2 class="section-heading">Client setup</h2>
-	<p class="description">The C++ client reads your username and API key from a file named config.json.  After compiling the client, run ./main -s in order to create and populate this file.  Before a document can be saved to the server, an document object must be created by runnning ./main -c [document].  The second argument is just the name of the document on the server, and doesn't need to be the same as the name of the local file.  Finally, the document can be edited with ./main -i [document_name] /path/to/file.</p>
+	<p class="description">The C++ client reads your username and API key from a file named config.json.  After compiling the client, run <code>./main -s</code> in order to create and populate this file.  Before a document can be saved to the server, an document object must be created by runnning <code>./main -c [document]</code>.  The second argument is just the name of the document on the server, and doesn't need to be the same as the name of the local file.  Finally, the document can be edited with <code>./main -i [document_name] /path/to/file</code>.</p>
 	<h2 class="section-heading">Server setup</h2>
-	<p class="description">The Django server can be run just like any Django app, with ./manage.py runserver.  From there, you can create accounts and interact with users as normal.  Consult<a class="django-site-link" href="https://docs.djangoproject.com/en/4.1/intro/tutorial01/">this guide</a> on additional steps required if you are new to Django.</p>
+	<p class="description">The Django server can be run just like any Django app, with <code>./manage.py runserver</code>.  From there, you can create accounts and interact with users as normal.  Consult<a class="django-site-link" href="https://docs.djangoproject.com/en/4.1/intro/tutorial01/">this guide</a> on additional steps required if you are new to Django.</p>
 
 </body>
 

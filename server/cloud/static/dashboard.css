@@ -55,11 +55,19 @@ footer {
 }
 
 .doc-card {
+	padding-top: 20px;
 	background-color: #e0e0e0;
 	border-radius: 12px;
 	padding: 20px;
 	text-decoration: none;
+	border: 2px solid #e0e0e0;
 	transition-duration: 0.5s;
+
+}
+
+.doc-card:hover {
+	background-color: #a3a3a3;
+	color: #000000;
 
 }
 
@@ -71,12 +79,16 @@ footer {
 	color: #000000;
 }
 
-.doc-card:hover {
-	background-color: #a3a3a3;
-	color: #000000;
-
+.doc-info {
+	padding-bottom: 10px;
 }
 
-.doc-info {
-	padding-bottom: 35px;
+.doc-container {
+	transition-duration: 0.5s;
+	background-color: #ebebeb;
+	border: 4px #d9d9d9;
+}
+
+.doc-container:hover {
+	background-color: #dedede;			
 }
