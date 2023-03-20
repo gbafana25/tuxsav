@@ -28,6 +28,9 @@ footer {
 	color: #969387;
 }
 
+.django-site-link { 
+	color: blue;
+}
 
 .description {
 	text-align: center;

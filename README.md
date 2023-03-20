@@ -16,8 +16,11 @@ The client is written in C++, and sends data to the server every four seconds
 - server verifies key validity and updates document
 - server sends success/failure response
 
+## Note on reading from Vim swp files
+- offset for start of data found in [this](https://github.com/adamhotep/misc-scripts/blob/master/ls.swp) script.
+- look for Vim documentation that gives a better explanation of the file data starting point
+- in future: could potentially store some of the metadata on the server
+
 
 ## TODO:
-- server checks if request method is correct
-- try different lengths for substring in `swpread.cpp`
-
+- encode text to base64 (to preserve newlines)

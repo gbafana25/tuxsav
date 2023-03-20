@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required 
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
+from django.utils import timezone
 import uuid
 import json
 from . import serv
@@ -47,8 +48,12 @@ def signup(request):
 def dashboard(request):
 	docs = Document.objects.filter(owner=request.user)
 	akobj = ApiUser.objects.get(name=request.user)
-	#print(docs[0].text, docs[1].text)
 	return render(request, 'cloud/dashboard.html', {'docs':docs, 'key':akobj.key})
+
+@login_required
+def document_viewer(request, name):
+	doc = Document.objects.get(owner=request.user, title=name)
+	return render(request, 'cloud/document-viewer.html', {"doc":doc})
 
 @csrf_exempt
 def update(request):
@@ -62,6 +67,7 @@ def update(request):
 		u = User.objects.get(username=au.name)
 		doc = Document.objects.get(owner=u, title=jbody['doc_name'])
 		doc.text = jbody["data"]
+		doc.modified_at = timezone.now()
 		doc.save()
 
 		return HttpResponse(serv.success(), content_type="application/json")
@@ -72,8 +78,10 @@ def update(request):
 
 @csrf_exempt
 def create(request):	
+	if request.method != 'POST':
+		return HttpResponse(serv.fail(), content_type="application/json")
+
 	jbody = json.loads(request.body.decode('utf-8'))
-	print(jbody)
 	if(serv.check_api_key(jbody["key"])):
 		au = ApiUser.objects.get(name=jbody['username'])
 		u = User.objects.get(username=au.name)

@@ -54,29 +54,21 @@ footer {
 	color: #ffffff;
 }
 
-.doc-card {
-	background-color: #e0e0e0;
-	border-radius: 12px;
-	padding: 20px;
-	text-decoration: none;
+.dash-btn {
 	transition-duration: 0.5s;
-
+	border: solid 2px #111173;	
+	background-color: #5263ff;
+	border-radius: 8px;
+	color: #ffffff;
 }
 
-.doc-link {
-	color: #000000;
+.dash-btn:hover {
+	background-color: #111173;
+	color: #ffffff;
 }
 
-.doc-link:hover {
-	color: #000000;
-}
-
-.doc-card:hover {
-	background-color: #a3a3a3;
-	color: #000000;
-
-}
-
-.doc-info {
-	padding-bottom: 35px;
+.viewport {
+	background-color: #ebebebeb;
+	padding: 30px;
+	font-size: 20px;
 }

@@ -25,7 +25,8 @@ bool VSReader::read_raw(std::string base) {
 	getline(this->swp, n);
 	// TODO: swp file indices range in 1000's, try different starting sizes 
 	
-	std::string sub = n.substr(n.size()-100, n.size());
+	std::string sub = n.substr(n.size()-900, n.size());
+	std::cout << sub << std::endl;
 	// reverse order of lines, not each character
 	for(int i = 0; i < sub.size(); i++) {
 		if(sub[i] != '\0') {
