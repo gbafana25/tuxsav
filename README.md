@@ -23,4 +23,4 @@ The client is written in C++, and sends data to the server every four seconds
 
 
 ## TODO:
-- encode text to base64 (to preserve newlines)
+- encode text to base64 or some encoding(to preserve newlines)
