@@ -24,6 +24,5 @@ The client is written in C++, and sends data to the server every four seconds
 
 
 ## TODO:
-- continue working on multi-sync part, allow files to be reopened and synced after being closed
 - store some metadata on server about local file (name, user?, etc.)
 - add endpoint to pull down saved documents

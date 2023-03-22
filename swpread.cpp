@@ -67,12 +67,15 @@ bool VSReader::read_raw(std::string base) {
 
 }
 
-void VSReader::get_final(std::string path) {
+bool VSReader::get_final(std::string path) {
 	std::ifstream fin;
 	this->raw.clear();
 	std::string plain;
 	std::string l;
 	fin.open(path);
+	if(!fin.is_open()) {
+		return false;
+	}
 	while(getline(fin, l)) {
 		plain.append(l);
 		plain += "\n";
@@ -81,7 +84,7 @@ void VSReader::get_final(std::string path) {
 
 	// convert 
 	//b64encode(this->raw);
-	
+	return true;	
 
 }
 

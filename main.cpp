@@ -70,32 +70,32 @@ int main(int argc, char **argv) {
 			json co = vr.load_config();
 
 			int num_files = co["remote_files"].size();
-			int flags[num_files] = { 0 };
-			int num_finished = 0;
-			while(num_finished < num_files) {
+			/*
+
+			manually kill loop w/ Ctrl+C
+			reads from original file if swap doesn't exist
+			
+			*/
+			while(true) {
 				for(int i = 0; i < co["remote_files"].size(); i++) {
-					bool is_good = vr.read_raw(co["local_files"][i]);
-					if(flags[i] == 1) { 
-						continue;	
-					} else if(is_good && flags[i] == 0) {
+					bool swap_is_good = vr.read_raw(co["local_files"][i]);
+					if(swap_is_good) { 
 						// keep updating, w/ delay
 						Client cl;
 						cl.username = co["username"];
 						cl.update(co["key"], vr.raw, co["remote_files"][i], co["url"]);
-						sleep(4);
 					} else {
-						Client f;
-						f.username = co["username"];
-						vr.get_final(co["local_files"][i]);
-						//std::cout << vr.raw << std::endl;
-						f.update(co["key"], vr.raw, co["remote_files"][i], co["url"]);
-						num_finished += 1;
-						flags[i] = 1;
+						bool final_is_good = vr.get_final(co["local_files"][i]);
+						if(final_is_good) {
+							Client cl;
+							cl.username = co["username"];
+							cl.update(co["key"], vr.raw, co["remote_files"][i], co["url"]);
 
-
+						}
 					}
 
 				}
+				sleep(4);
 			}
 
 
