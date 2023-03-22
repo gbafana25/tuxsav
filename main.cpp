@@ -3,9 +3,11 @@
 #include <cstdlib>
 #include <string>
 #include <cstring>
+#include <typeinfo>
 
 #include "client.hpp"
 #include "swpread.hpp"
+#include "conf.hpp"
 #include "json/json.hpp"
 
 using json = nlohmann::json_abi_v3_11_2::json;
@@ -13,26 +15,14 @@ using json = nlohmann::json_abi_v3_11_2::json;
 
 void start_dialog() {
 	std::cout << "-s : run setup dialog" << std::endl;
-	std::cout << "-i [document] [local file]: initialize backup daemon" << std::endl;
+	std::cout << "-i [document] [/path/to/file] : backup one file" << std::endl;
+	std::cout << "-a [document] [/path/to/file] : add file to backup list" << std::endl;
+	
 	std::cout << "-c [document] : create document on server" << std::endl;
+	std::cout << "-r : automatically backup all files in config" << std::endl;
 	std::cout << "-h : display this help menu" << std::endl;	
 }
 
-void run_setup() {
-	std::string n;
-	std::string k;
-	std::ofstream conf("config.json");
-	json s;
-	std::cout << "Username: ";
-	std::cin >> n;
-	s["username"] = n;
-	std::cout << "Key: ";
-	std::cin >>  k;
-	s["key"] = k;
-		
-	conf << s.dump(4) << std::endl;
-	conf.close();
-}
 
 
 int main(int argc, char **argv) {
@@ -71,6 +61,42 @@ int main(int argc, char **argv) {
 			json co = vr.load_config();
 			c.username = co["username"];
 			c.create(co["key"], argv[2]);
+		} else if(strcmp(argv[1],"-a") == 0 && argc == 4) {
+			add_doc_obj(argv[2], argv[3]);	
+		} else if(strcmp(argv[1],"-r") == 0 && argc == 2) {
+			VSReader vr;
+			json co = vr.load_config();
+
+			int num_files = co["remote_files"].size();
+			int flags[num_files] = { 0 };
+			int num_finished = 0;
+			while(num_finished < num_files) {
+				for(int i = 0; i < co["remote_files"].size(); i++) {
+					bool is_good = vr.read_raw(co["local_files"][i]);
+					if(flags[i] == 1) { 
+						continue;	
+					} else if(is_good && flags[i] == 0) {
+						// keep updating, w/ delay
+						Client cl;
+						cl.username = co["username"];
+						cl.update(co["key"], vr.raw, co["remote_files"][i]);
+						sleep(4);
+					} else {
+						Client f;
+						f.username = co["username"];
+						vr.get_final(co["local_files"][i]);
+						//std::cout << vr.raw << std::endl;
+						f.update(co["key"], vr.raw, co["remote_files"][i]);
+						num_finished += 1;
+						flags[i] = 1;
+
+
+					}
+
+				}
+			}
+
+
 		}
 	}
 	

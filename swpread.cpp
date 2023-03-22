@@ -12,38 +12,6 @@
 
 using json = nlohmann::json_abi_v3_11_2::json;
 
-const std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-void b64encode(std::string r) {
-	std::string res;
-	std::byte orig[r.size()];
-	for(int i = 0; i < r.size(); i++) {
-		orig[i] = std::byte(r[i]);
-
-		//shift.insert(pos, orig[i] >> 2);
-		//std::bitset<8> orig = r[i];
-		//long ind = orig.to_ulong();
-		/*
-		std::bitset<8> orig = r[i];
-		std::bitset<6> bit;
-		int c = 0;
-		for(int j = 0; j < orig.size() - 1; j++) {
-			bit[j] = orig[j];	
-			c++;
-		}
-		
-		long ind = bit.to_ulong();
-		//std::cout << alphabet[ind];
-		std::cout << orig << "," << bit << std::endl;
-		*/
-		std::cout << std::to_integer<int>(orig[i])-97 << " ";
-		
-	}
-	
-	
-}
-
-
 VSReader::VSReader() {}
 
 bool VSReader::read_raw(std::string base) {
@@ -58,11 +26,12 @@ bool VSReader::read_raw(std::string base) {
 		return false;
 	}
 	this->raw.clear();
-	//getline(this->swp, n);
 	std::ostringstream rdr;
 	rdr << this->swp.rdbuf();
 	n = rdr.str();
 	
+	// some data still gets cut off for large files?
+	// test w/ README.md
 	std::string sub = n.substr(n.size()-900, n.size());
 	sub.erase(0, full.size()-1);
 	// reverse order of lines, not each character

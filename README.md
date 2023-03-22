@@ -19,9 +19,11 @@ The client is written in C++, and sends data to the server every four seconds
 ## Note on reading from Vim swp files
 - offset for start of data found in [this](https://github.com/adamhotep/misc-scripts/blob/master/ls.swp) script.
 - look for Vim documentation that gives a better explanation of the file data starting point
+- keep experimenting with offset index
 - in future: could potentially store some of the metadata on the server
 
 
 ## TODO:
 - store some metadata on server about local file (name, user?, etc.)
-- upload multiple files at once
+- add endpoint to pull down saved documents
+- continue working on multi-sync part, allow files to be reopened and synced after being closed
