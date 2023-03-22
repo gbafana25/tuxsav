@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
+from django.utils.text import normalize_newlines
 import uuid
 import json
 from . import serv
@@ -62,11 +63,11 @@ def update(request):
 
 	jbody = json.loads(request.body.decode('utf-8'))
 	if(serv.check_api_key(jbody["key"])):
-		print("key verified")
 		au = ApiUser.objects.get(name=jbody['username'])
 		u = User.objects.get(username=au.name)
 		doc = Document.objects.get(owner=u, title=jbody['doc_name'])
 		doc.text = jbody["data"]
+		normalize_newlines(doc.text);
 		doc.modified_at = timezone.now()
 		doc.save()
 

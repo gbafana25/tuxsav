@@ -5,8 +5,6 @@
 #include <cstring>
 
 #include "client.hpp"
-#include "term.hpp"
-#include "editor.hpp"
 #include "swpread.hpp"
 #include "json/json.hpp"
 
@@ -62,7 +60,7 @@ int main(int argc, char **argv) {
 			Client f;
 			f.username = co["username"];
 			vr.get_final(argv[3]);
-			std::cout << vr.raw << std::endl;
+			//std::cout << vr.raw << std::endl;
 			f.update(co["key"], vr.raw, argv[2]);
 
 

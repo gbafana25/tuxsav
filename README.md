@@ -23,4 +23,5 @@ The client is written in C++, and sends data to the server every four seconds
 
 
 ## TODO:
-- encode text to base64 or some encoding(to preserve newlines)
+- store some metadata on server about local file (name, user?, etc.)
+- upload multiple files at once

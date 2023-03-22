@@ -38,6 +38,7 @@ void Client::update(std::string key, std::string data, std::string name) {
 	struct curl_slist *hd = NULL;
 	fields["key"] = key;
 	fields["data"] = data;
+	//std::cout << fields["data"] << std::endl;
 	fields["doc_name"] = name;
 	fields["username"] = this->username;
 	std::string fstr = fields.dump(4);

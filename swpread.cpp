@@ -1,11 +1,48 @@
 #include <fstream>
 #include <iostream>
 #include <ostream>
+#include <cstring>
+#include <algorithm>
+#include <cstddef>
+#include <bitset>
+#include <vector>
 
 #include "swpread.hpp"
 #include "json/json.hpp"
 
 using json = nlohmann::json_abi_v3_11_2::json;
+
+const std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+void b64encode(std::string r) {
+	std::string res;
+	std::byte orig[r.size()];
+	for(int i = 0; i < r.size(); i++) {
+		orig[i] = std::byte(r[i]);
+
+		//shift.insert(pos, orig[i] >> 2);
+		//std::bitset<8> orig = r[i];
+		//long ind = orig.to_ulong();
+		/*
+		std::bitset<8> orig = r[i];
+		std::bitset<6> bit;
+		int c = 0;
+		for(int j = 0; j < orig.size() - 1; j++) {
+			bit[j] = orig[j];	
+			c++;
+		}
+		
+		long ind = bit.to_ulong();
+		//std::cout << alphabet[ind];
+		std::cout << orig << "," << bit << std::endl;
+		*/
+		std::cout << std::to_integer<int>(orig[i])-97 << " ";
+		
+	}
+	
+	
+}
+
 
 VSReader::VSReader() {}
 
@@ -21,12 +58,13 @@ bool VSReader::read_raw(std::string base) {
 		return false;
 	}
 	this->raw.clear();
-	// check if valid letter, num space till hits offset
-	getline(this->swp, n);
-	// TODO: swp file indices range in 1000's, try different starting sizes 
+	//getline(this->swp, n);
+	std::ostringstream rdr;
+	rdr << this->swp.rdbuf();
+	n = rdr.str();
 	
 	std::string sub = n.substr(n.size()-900, n.size());
-	std::cout << sub << std::endl;
+	sub.erase(0, full.size()-1);
 	// reverse order of lines, not each character
 	for(int i = 0; i < sub.size(); i++) {
 		if(sub[i] != '\0') {
@@ -47,6 +85,7 @@ bool VSReader::read_raw(std::string base) {
 	}
 	
 	
+	//b64encode(this->raw);
 	this->swp.close();
 	return true;
 
@@ -55,13 +94,18 @@ bool VSReader::read_raw(std::string base) {
 void VSReader::get_final(std::string path) {
 	std::ifstream fin;
 	this->raw.clear();
+	std::string plain;
 	std::string l;
 	fin.open(path);
 	while(getline(fin, l)) {
-		this->raw.append(l);
-		this->raw += "\n";
+		plain.append(l);
+		plain += "\n";
 	}
+	this->raw = plain;
 
+	// convert 
+	//b64encode(this->raw);
+	
 
 }
 
