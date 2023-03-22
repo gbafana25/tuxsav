@@ -16,11 +16,18 @@ VSReader::VSReader() {}
 
 bool VSReader::read_raw(std::string base) {
 	std::string n;
-	std::string full = ".";
+	//std::string full = ".";
+	std::string full;
 	char c;
 	int start = 0;
 	full.append(base);
 	full.append(".swp");
+	size_t last_slash = full.find_last_of("/");
+	if(last_slash != std::string::npos) {
+		full.insert(last_slash+1, ".");
+	} else {
+		full.insert(0, ".");
+	}
 	this->swp.open(full);
 	if(!this->swp.is_open()) {
 		return false;

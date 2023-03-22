@@ -17,6 +17,7 @@ void run_setup() {
 	std::string k;
 	std::string serv;
 	std::string local;
+	std::string url;
 	std::ofstream conf("config.json");
 	json s;
 	std::cout << "Username: ";
@@ -29,8 +30,11 @@ void run_setup() {
 	std::cin >> serv;
 	std::cout << "Local file path: ";
 	std::cin >> local;
+	std::cout << "Server url (no trailing backslash): ";	
+	std::cin >> url;
 	s["local_files"] = {local,};
 	s["remote_files"] = {serv,};
+	s["url"] = url;
 		
 	conf << s.dump(4) << std::endl;
 	conf.close();
@@ -54,9 +58,7 @@ void add_doc_obj(std::string serv_name, std::string local_name) {
 	
 	std::ofstream c("config.json");
 	c << in.dump(4) << std::endl; 
-	c.close();
-
-	
+	c.close();	
 
 }
 

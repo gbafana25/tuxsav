@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
 				// keep updating, w/ delay
 				Client cl;
 				cl.username = co["username"];
-				cl.update(co["key"], vr.raw, argv[2]);
+				cl.update(co["key"], vr.raw, argv[2], co["url"]);
 				sleep(4);
 			}
 
@@ -51,18 +51,20 @@ int main(int argc, char **argv) {
 			f.username = co["username"];
 			vr.get_final(argv[3]);
 			//std::cout << vr.raw << std::endl;
-			f.update(co["key"], vr.raw, argv[2]);
+			f.update(co["key"], vr.raw, argv[2], co["url"]);
 
 
 			return 0;
-		} else if(strcmp(argv[1],"-c") == 0 && argc == 4) {
+		} else if(strcmp(argv[1],"-c") == 0 && argc == 3) {
 			Client c;
 			VSReader vr;
 			json co = vr.load_config();
 			c.username = co["username"];
-			c.create(co["key"], argv[2]);
+			c.create(co["key"], argv[2], co["url"]);
+			return 0;
 		} else if(strcmp(argv[1],"-a") == 0 && argc == 4) {
 			add_doc_obj(argv[2], argv[3]);	
+			return 0;
 		} else if(strcmp(argv[1],"-r") == 0 && argc == 2) {
 			VSReader vr;
 			json co = vr.load_config();
@@ -79,14 +81,14 @@ int main(int argc, char **argv) {
 						// keep updating, w/ delay
 						Client cl;
 						cl.username = co["username"];
-						cl.update(co["key"], vr.raw, co["remote_files"][i]);
+						cl.update(co["key"], vr.raw, co["remote_files"][i], co["url"]);
 						sleep(4);
 					} else {
 						Client f;
 						f.username = co["username"];
 						vr.get_final(co["local_files"][i]);
 						//std::cout << vr.raw << std::endl;
-						f.update(co["key"], vr.raw, co["remote_files"][i]);
+						f.update(co["key"], vr.raw, co["remote_files"][i], co["url"]);
 						num_finished += 1;
 						flags[i] = 1;
 

@@ -32,13 +32,12 @@ Client::Client() {
 }
 
 
-void Client::update(std::string key, std::string data, std::string name) {
-	this->url = "http://localhost:8000/update/";
+void Client::update(std::string key, std::string data, std::string name, std::string addr) {
+	this->url = addr+"/update/";
 	json fields;
 	struct curl_slist *hd = NULL;
 	fields["key"] = key;
 	fields["data"] = data;
-	//std::cout << fields["data"] << std::endl;
 	fields["doc_name"] = name;
 	fields["username"] = this->username;
 	std::string fstr = fields.dump(4);
@@ -58,8 +57,8 @@ void Client::update(std::string key, std::string data, std::string name) {
 
 }
 
-void Client::create(std::string key, std::string name) {
-	this->url = "http://localhost:8000/create/";
+void Client::create(std::string key, std::string name, std::string addr) {
+	this->url = addr+"/create/";
 	json fields;
 	struct curl_slist *hd = NULL;
 	fields["key"] = key;
