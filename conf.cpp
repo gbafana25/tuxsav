@@ -30,6 +30,7 @@ void run_setup() {
 	std::cin >> serv;
 	std::cout << "Local file path: ";
 	std::cin >> local;
+	// TODO: remove trailing slash, if included, automatically
 	std::cout << "Server url (no trailing backslash): ";	
 	std::cin >> url;
 	s["local_files"] = {local,};

@@ -14,5 +14,6 @@ class Client {
 	Client();
 	void update(std::string, std::string, std::string, std::string);
 	void create(std::string, std::string, std::string);
+	std::string fetch(std::string key, std::string name, std::string addr);
 	
 };

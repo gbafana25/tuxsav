@@ -14,12 +14,15 @@ using json = nlohmann::json_abi_v3_11_2::json;
 
 
 void start_dialog() {
+
 	std::cout << "-s : run setup dialog" << std::endl;
 	std::cout << "-i [document] [/path/to/file] : backup one file" << std::endl;
 	std::cout << "-a [document] [/path/to/file] : add file to backup list" << std::endl;
 	
 	std::cout << "-c [document] : create document on server" << std::endl;
+	std::cout << "-f [document] [/path/to/file] : fetch document from server and put it into specified file" << std::endl;
 	std::cout << "-r : automatically backup all files in config" << std::endl;
+	std::cout << "-sync : restore all files in config" << std::endl;
 	std::cout << "-h : display this help menu" << std::endl;	
 }
 
@@ -99,6 +102,36 @@ int main(int argc, char **argv) {
 			}
 
 
+
+		} else if(strcmp(argv[1],"-f") == 0 && argc == 4) {
+			Client c;
+			VSReader vr;
+			json co = vr.load_config();
+			c.username = co["username"];
+			std::string data = c.fetch(co["key"], argv[2], co["url"]);
+			
+			std::ofstream out(argv[3]);
+			out << data << std::endl;
+			out.close();	
+
+			return 0;
+		} else if(strcmp(argv[1],"-sync") == 0 && argc == 2) {
+			VSReader vr;
+			json co = vr.load_config();
+
+			for(int i = 0; i < co["remote_files"].size(); i++) {
+				Client c;
+				c.username = co["username"];
+				std::string d = c.fetch(co["key"], co["remote_files"][i], co["url"]);
+				std::ofstream out(co["local_files"][i]);
+				out << d << std::endl;
+				out.close();
+			}
+
+			return 0;
+		} else {
+			start_dialog();
+			return -1;
 		}
 	}
 	

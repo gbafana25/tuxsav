@@ -2,6 +2,8 @@
 main
 *.swp
 config.json
+testfile
+fb_local
 
 # Django
 *.sqlite3

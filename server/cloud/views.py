@@ -93,3 +93,20 @@ def create(request):
 	else:
 		return HttpResponse(serv.fail(), content_type="application/json")
 
+@csrf_exempt
+def fetch(request):
+	if request.method != 'POST':
+		return HttpResponse(serv.fail(), content_type="application/json")
+
+	jbody = json.loads(request.body.decode('utf-8'))
+	
+	if(serv.check_api_key(jbody["key"])):
+		# get document
+		au = ApiUser.objects.get(name=jbody['username'])
+		u = User.objects.get(username=au.name)
+		doc = Document.objects.get(title=jbody["doc_name"], owner=u)
+
+		resp_data = {"file_data": doc.text}	
+		return HttpResponse(json.dumps(resp_data), content_type="application/json")
+	else:
+		return HttpResponse(serv.fail(), content_type="application/json")
