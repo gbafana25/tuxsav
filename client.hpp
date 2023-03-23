@@ -1,19 +1,28 @@
 #include <curl/curl.h>
+#include "json/json.hpp"
 
+using json = nlohmann::json_abi_v3_11_2::json;
 
 class Client {
+	private:
+	std::string username;
+
 	public:
 	
 	CURL *client;
 	CURLcode res;
+	struct curl_slist *hd;
 	std::string url;
 	std::string buf;
-	std::string username;
 
 
 	Client();
+	void set_username(std::string);
+	std::string get_username();
+	json execute_api_request(std::string);
 	void update(std::string, std::string, std::string, std::string);
 	void create(std::string, std::string, std::string);
 	std::string fetch(std::string key, std::string name, std::string addr);
+	void write_response_to_file(std::string, std::string);
 	
 };

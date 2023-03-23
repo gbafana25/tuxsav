@@ -1,6 +1,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <cstring>
 #include <curl/curl.h>
@@ -31,18 +32,26 @@ Client::Client() {
 
 }
 
+void Client::write_response_to_file(std::string data, std::string fname) {
+	std::ofstream out(fname);
+	out << data << std::endl;
+	out.close();
+}
 
-void Client::update(std::string key, std::string data, std::string name, std::string addr) {
-	this->url = addr+"/update/";
-	json fields;
-	struct curl_slist *hd = NULL;
-	fields["key"] = key;
-	fields["data"] = data;
-	fields["doc_name"] = name;
-	fields["username"] = this->username;
-	std::string fstr = fields.dump(4);
-	hd = curl_slist_append(hd, "Content-Type: application/json");
-	curl_easy_setopt(this->client, CURLOPT_HTTPHEADER, hd);
+
+void Client::set_username(std::string u) {
+	this->username = u;	
+}
+	
+std::string Client::get_username() {
+	return this->username;
+}
+
+json Client::execute_api_request(std::string fstr) {
+	this->hd = NULL;
+	this->hd = curl_slist_append(this->hd, "Content-Type: application/json");
+	
+	curl_easy_setopt(this->client, CURLOPT_HTTPHEADER, this->hd);
 
 	curl_easy_setopt(this->client, CURLOPT_URL, this->url.c_str());
 	curl_easy_setopt(this->client, CURLOPT_POST, 1L);
@@ -51,55 +60,48 @@ void Client::update(std::string key, std::string data, std::string name, std::st
 	this->res = curl_easy_perform(this->client);
 	curl_easy_cleanup(this->client);
 
-	//std::cout << this->buf << std::endl;
 	json rp = json::parse(this->buf);
+	return rp;
+
+}
+
+
+void Client::update(std::string key, std::string data, std::string name, std::string addr) {
+	this->url = addr+"/update/";
+	json fields;
+	fields["key"] = key;
+	fields["data"] = data;
+	fields["doc_name"] = name;
+	fields["username"] = this->username;
+	std::string fstr = fields.dump(4);	
+
+	json rp = execute_api_request(fstr);
 	std::cout << rp["status"] << std::endl;
 
 }
 
 void Client::create(std::string key, std::string name, std::string addr) {
 	this->url = addr+"/create/";
+	
 	json fields;
-	struct curl_slist *hd = NULL;
 	fields["key"] = key;
 	fields["doc_name"] = name;
 	fields["username"] = this->username;
 	std::string fstr = fields.dump(4);
-	hd = curl_slist_append(hd, "Content-Type: application/json");
-	curl_easy_setopt(this->client, CURLOPT_HTTPHEADER, hd);
-
-	curl_easy_setopt(this->client, CURLOPT_URL, this->url.c_str());
-	curl_easy_setopt(this->client, CURLOPT_POST, 1L);
-	curl_easy_setopt(this->client, CURLOPT_POSTFIELDSIZE, -1L);
-	curl_easy_setopt(this->client, CURLOPT_POSTFIELDS, fstr.c_str());
-	this->res = curl_easy_perform(this->client);
-	curl_easy_cleanup(this->client);
-
-	//std::cout << this->buf << std::endl;
-	json rp = json::parse(this->buf);
+	
+	json rp = execute_api_request(fstr);
 	std::cout << rp["status"] << std::endl;
 
 }
 
 std::string Client::fetch(std::string key, std::string name, std::string addr) {
 	this->url = addr+"/fetch/";	
+	
 	json fields;
-	struct curl_slist *hd = NULL;
 	fields["key"] = key;
 	fields["doc_name"] = name;
 	fields["username"] = this->username;
 	std::string fstr = fields.dump(4);
-	hd = curl_slist_append(hd, "Content-Type: application/json");
-	curl_easy_setopt(this->client, CURLOPT_HTTPHEADER, hd);
-	
-	curl_easy_setopt(this->client, CURLOPT_URL, this->url.c_str());
-	curl_easy_setopt(this->client, CURLOPT_POST, 1L);
-	curl_easy_setopt(this->client, CURLOPT_POSTFIELDSIZE, -1L);
-	curl_easy_setopt(this->client, CURLOPT_POSTFIELDS, fstr.c_str());
-	this->res = curl_easy_perform(this->client);
-	curl_easy_cleanup(this->client);
-
-	//std::cout << this->buf << std::endl;
-	json rp = json::parse(this->buf);
+	json rp = execute_api_request(fstr);
 	return rp["file_data"];
 }
