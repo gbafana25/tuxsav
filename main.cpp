@@ -4,7 +4,6 @@
 #include <cstring>
 #include <chrono>
 #include <thread>
-//#include <memory>
 
 #include "client.hpp"
 #include "swpread.hpp"
@@ -42,12 +41,25 @@ int main(int argc, char **argv) {
 			run_setup();
 			return 0;
 		} else if(strcmp(argv[1],"-i") == 0 && argc == 4) {
+			// Check if document name is <= 50 characters
+			std::string arg = argv[2];
+			if(!isTitleValid(arg)) {
+				return 0;
+			}
 		
-			//VSReader vr;
+			/*
+
+			Continuously read from .swp file and send the file data to the server.
+			If the .swp file closes, read from source file and exit. 
+
+			*/
+
 			while(vr.read_raw(argv[3])) {
 				// keep updating, w/ delay
 				Client cl;
 				cl.set_username(user_config["username"]);
+				
+
 				cl.update(user_config["key"], vr.raw, argv[2], user_config["url"]);
 
 				// requires unistd.h, below version is portable
@@ -57,26 +69,43 @@ int main(int argc, char **argv) {
 
 			// file has been closed, submit final copy to server
 			Client f;
-			//f.username = user_config["username"];
 			f.set_username(user_config["username"]);
 			vr.get_final(argv[3]);
-			//std::cout << vr.raw << std::endl;
 			f.update(user_config["key"], vr.raw, argv[2], user_config["url"]);
 
 
 			return 0;
 		} else if(strcmp(argv[1],"-c") == 0 && argc == 3) {
+			// check title length
+			std::string arg = argv[2];
+			if(!isTitleValid(arg)) {
+				return 0;
+			}
+
+			/*
+
+			Create a new Document object on the server.
+			
+			*/
+
 			Client c;
-			//c.username = user_config["username"];
 			c.set_username(user_config["username"]);
 			c.create(user_config["key"], argv[2], user_config["url"]);
 			return 0;
 		} else if(strcmp(argv[1],"-a") == 0 && argc == 4) {
+			std::string arg = argv[2];
+			if(!isTitleValid(arg)) {
+
+				return 0;
+			}
+			/*
+
+			Add a new document/local file pair to their respective arrays in config.json.
+			*/
 			add_doc_obj(argv[2], argv[3]);	
 			return 0;
 		} else if(strcmp(argv[1],"-sync") == 0 && argc == 2) {
 
-			int num_files = user_config["remote_files"].size();
 			/*
 
 			This function runs indefintely, in order to watch all files, regardless whether they're open or closed.
@@ -84,21 +113,23 @@ int main(int argc, char **argv) {
 			manually kill loop w/ Ctrl+C
 			reads from original file if swap doesn't exist
 			
+			TODO: send documents as one request, with arrays for document names and data?
+			This would help reduce the number of requests sent.
+			
 			*/
 			while(true) {
-				for(int i = 0; i < user_config["remote_files"].size(); i++) {
+				for(long unsigned int i = 0; i < user_config["remote_files"].size(); i++) {
+					// Will return false if .swp doesn't exist
 					bool swap_is_good = vr.read_raw(user_config["local_files"][i]);
 					if(swap_is_good) { 
-						// keep updating, w/ delay
+						// keep updating file contents, w/ delay
 						Client cl;
-						//cl.username = user_config["username"];
 						cl.set_username(user_config["username"]);
 						cl.update(user_config["key"], vr.raw, user_config["remote_files"][i], user_config["url"]);
 					} else {
 						bool final_is_good = vr.get_final(user_config["local_files"][i]);
 						if(final_is_good) {
 							Client cl;
-							//cl.username = user_config["username"];
 							cl.set_username(user_config["username"]);
 							cl.update(user_config["key"], vr.raw, user_config["remote_files"][i], user_config["url"]);
 
@@ -115,6 +146,16 @@ int main(int argc, char **argv) {
 
 
 		} else if(strcmp(argv[1],"-f") == 0 && argc == 4) {
+			std::string arg = argv[2];
+			if(!isTitleValid(arg)) {
+				return 0;
+			}
+			/*
+
+			Restore document from server onto local machine
+
+			*/
+
 			Client c;
 			c.set_username(user_config["username"]);
 			std::string data = c.fetch(user_config["key"], argv[2], user_config["url"]);
@@ -123,8 +164,13 @@ int main(int argc, char **argv) {
 
 			return 0;
 		} else if(strcmp(argv[1],"-restore") == 0 && argc == 2) {
+			/*
 
-			for(int i = 0; i < user_config["remote_files"].size(); i++) {
+			Get all files in config.json and restore their contents from the server.
+
+			*/
+
+			for(long unsigned int i = 0; i < user_config["remote_files"].size(); i++) {
 				Client c;
 				c.set_username(user_config["username"]);
 				std::string d = c.fetch(user_config["key"], user_config["remote_files"][i], user_config["url"]);

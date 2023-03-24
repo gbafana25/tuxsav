@@ -1,5 +1,5 @@
 all: $(wildcard *.c)
-	g++ --std=c++17 $(wildcard *.cpp) -o main -l curl 
+	g++ -Wall --std=c++17 $(wildcard *.cpp) -o main -l curl 
 
 clean:
 	rm main 

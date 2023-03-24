@@ -11,28 +11,46 @@
 
 using json = nlohmann::json_abi_v3_11_2::json;
 
+/*
+
+Setup dialog that populates JSON config file.
+
+
+*/
 void run_setup() {
 	std::cout << "Warning: this will wipe out current settings" << std::endl;
+	std::cout << "To cancel, enter Ctrl+C" << std::endl << std::endl;
+
 	std::string n;
 	std::string k;
 	std::string serv;
 	std::string local;
 	std::string url;
+
 	std::ofstream conf("config.json");
 	json s;
 	std::cout << "Username: ";
 	std::cin >> n;
 	s["username"] = n;
+
 	std::cout << "Key: ";
 	std::cin >>  k;
 	s["key"] = k;
+
 	std::cout << "Document Name (on server): ";
 	std::cin >> serv;
+
 	std::cout << "Local file path: ";
 	std::cin >> local;
-	// TODO: remove trailing slash, if included, automatically
-	std::cout << "Server url (no trailing backslash): ";	
+
+	std::cout << "Server url: ";		
 	std::cin >> url;
+	// remove trailing slash, if it exists
+	if(url[url.size()-1] == '/') {
+		url.erase(url.size()-1);
+	}
+
+
 	s["local_files"] = {local,};
 	s["remote_files"] = {serv,};
 	s["url"] = url;
@@ -40,6 +58,13 @@ void run_setup() {
 	conf << s.dump(4) << std::endl;
 	conf.close();
 }
+
+/*
+
+Appends to list of local and remote files
+in config.json.
+
+*/
 
 void add_doc_obj(std::string serv_name, std::string local_name) {
 	std::ifstream conf("config.json");
@@ -63,4 +88,16 @@ void add_doc_obj(std::string serv_name, std::string local_name) {
 
 }
 
+/*
 
+Makes sure that a document's name is not more 50 characters long
+
+*/
+
+bool isTitleValid(std::string t) {
+	if(t.length() > 50) {
+		std::cout << "Title name must be <= 50 characters" << std::endl;
+		return false;
+	}
+	return true;
+}
