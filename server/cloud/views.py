@@ -15,16 +15,21 @@ from .forms import SignupForm
 from .models import Document, ApiUser 
 
 # Create your views here.
+
+# Home page
 def home(request):
 	return render(request, 'cloud/home.html', {})
 
+# Setup tutorial 
 def setup_guide(request):
 	return render(request, 'cloud/setup-guide.html', {})
 
+# signout page, login handled by django builtin: accounts/
 def signout(request):
 	logout(request)
 	return render(request, 'cloud/home.html', {})
 
+# signup page
 def signup(request):
 	if request.method == 'POST':
 		su_form = SignupForm(request.POST)
@@ -34,6 +39,7 @@ def signup(request):
 			usr = User.objects.create_user(su_form.cleaned_data['username'], su_form.cleaned_data['email'], su_form.cleaned_data['password'])
 			usr.save()
 			aobj = ApiUser.objects.create(name=su_form.cleaned_data['username'])
+			# API keys are uuids
 			aobj.key = uuid.uuid4()
 	
 			aobj.save()
@@ -45,16 +51,22 @@ def signup(request):
 	return render(request, 'cloud/signup.html', {'form':su_form})
 
 
+# loads data on all documents (except text)
+
 @login_required
 def dashboard(request):
 	docs = Document.objects.filter(owner=request.user)
 	akobj = ApiUser.objects.get(name=request.user)
 	return render(request, 'cloud/dashboard.html', {'docs':docs, 'key':akobj.key})
 
+# see contents of document 
+
 @login_required
 def document_viewer(request, name):
 	doc = Document.objects.get(owner=request.user, title=name)
 	return render(request, 'cloud/document-viewer.html', {"doc":doc})
+
+# updates contents of document on server
 
 @csrf_exempt
 def update(request):
@@ -62,12 +74,19 @@ def update(request):
 		return HttpResponse(serv.fail())
 
 	jbody = json.loads(request.body.decode('utf-8'))
-	if(serv.check_api_key(jbody["key"])):
+	# API key verified
+	if(serv.check_api_key(jbody["key"], jbody["username"])):
+		# get username from ApiUser object
 		au = ApiUser.objects.get(name=jbody['username'])
+		# use username string to get actual user object
 		u = User.objects.get(username=au.name)
+		# user object and title passed to Document getter
 		doc = Document.objects.get(owner=u, title=jbody['doc_name'])
 		doc.text = jbody["data"]
+		# make sure newlines appear in the HTML
 		normalize_newlines(doc.text);
+		
+		# update modification time
 		doc.modified_at = timezone.now()
 		doc.save()
 
@@ -76,6 +95,7 @@ def update(request):
 	else:
 		return HttpResponse(serv.fail(), content_type="application/json")
 
+# create a document object on the server
 
 @csrf_exempt
 def create(request):	
@@ -83,7 +103,8 @@ def create(request):
 		return HttpResponse(serv.fail(), content_type="application/json")
 
 	jbody = json.loads(request.body.decode('utf-8'))
-	if(serv.check_api_key(jbody["key"])):
+	# check API key
+	if(serv.check_api_key(jbody["key"], jbody["username"])):
 		au = ApiUser.objects.get(name=jbody['username'])
 		u = User.objects.get(username=au.name)
 		doc = Document.objects.create(owner=u, title=jbody["doc_name"])
@@ -92,6 +113,8 @@ def create(request):
 		return HttpResponse(serv.success(), content_type="application/json")
 	else:
 		return HttpResponse(serv.fail(), content_type="application/json")
+
+# send document data to client
 
 @csrf_exempt
 def fetch(request):
