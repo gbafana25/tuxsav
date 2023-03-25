@@ -57,7 +57,12 @@ def signup(request):
 def dashboard(request):
 	docs = Document.objects.filter(owner=request.user)
 	akobj = ApiUser.objects.get(name=request.user)
-	return render(request, 'cloud/dashboard.html', {'docs':docs, 'key':akobj.key})
+	time_list = []
+	for d in docs:
+		time_list.append(serv.get_elapsed(d.modified_at))
+
+	group = zip(docs, time_list)
+	return render(request, 'cloud/dashboard.html', {'docs':group, 'key':akobj.key})
 
 # see contents of document 
 

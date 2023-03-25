@@ -19,10 +19,10 @@
 
 
 <body>
-	{% for d in docs %}
+	{% for d, t in docs %}
 		<div class="doc-container">
 		<a class="doc-link" href="/view/{{d.title}}/"><h3 class="doc-card">{{ d.title }}</h3></a>
-		<p class="doc-info">Last modified: {{ d.modified_at }}</p>
+		<p class="doc-info">Last modified: {{ t }}</p>
 		<p class="doc-info">Edited from: {{ d.source_machine }}</p>
 		<p class="doc-info">Local filename: {{ d.current_source_file }}</p>
 		<p class="doc-info">Created: {{ d.created_at }}</p>
