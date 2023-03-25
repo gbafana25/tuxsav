@@ -12,13 +12,13 @@ VSReader::VSReader() {}
 
 /*
 
-Read from Vim .swp file
+Generate .swp file name from regular file name
 
 */
-bool VSReader::read_raw(std::string base) {
+
+std::string VSReader::build_path(std::string base) {
 	std::string n;
 	std::string full;
-	int start = 0;
 	full.append(base);
 	full.append(".swp");
 
@@ -35,6 +35,45 @@ bool VSReader::read_raw(std::string base) {
 		// put the period at the beginning	
 		full.insert(0, ".");
 	}
+	return full;
+	
+}
+
+/*
+
+Read metadata from .swp file 
+
+*/
+
+bool VSReader::read_metadata(std::string base) {
+	std::string full = this->build_path(base);
+	std::ifstream met;
+	std::string n;
+	met.open(full);
+	if(!met.is_open()) {
+		return false;
+	}
+
+	std::ostringstream rdr;
+	rdr << met.rdbuf();
+	n = rdr.str();
+
+	this->host = n.substr(68, 40);	
+	
+	return true;
+
+}
+
+/*
+
+Read from Vim .swp file
+
+*/
+bool VSReader::read_raw(std::string base) {
+	std::string full = this->build_path(base);
+	std::string n;
+	int start = 0;
+	
 	this->swp.open(full);
 	if(!this->swp.is_open()) {
 		return false;

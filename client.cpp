@@ -109,15 +109,42 @@ doc_name: string
 addr - base url loaded from settings
 
 */
-void Client::update(std::string key, std::string data, std::string name, std::string addr) {
+void Client::update(std::string key, std::string data, std::string name, std::string addr, std::string host, std::string local) {
 	this->url = addr+"/update/";
 	json fields;
 	fields["key"] = key;
 	fields["data"] = data;
 	fields["doc_name"] = name;
 	fields["username"] = this->username;
+	fields["host_name"] = host;
+	fields["local_name"] = local;
 	std::string fstr = fields.dump(4);	
 
+	json rp = execute_api_request(fstr);
+	std::cout << rp["status"] << std::endl;
+
+}
+
+/*
+
+API - /delete
+request data:
+key: string
+doc_name: string
+username: string
+
+addr - base url loaded from settings
+
+*/
+void Client::delete_document(std::string key, std::string name, std::string addr) {
+	this->url = addr+"/delete/";
+	
+	json fields;
+	fields["key"] = key;
+	fields["doc_name"] = name;
+	fields["username"] = this->username;
+	std::string fstr = fields.dump(4);
+	
 	json rp = execute_api_request(fstr);
 	std::cout << rp["status"] << std::endl;
 

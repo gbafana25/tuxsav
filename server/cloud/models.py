@@ -12,6 +12,10 @@ class Document(models.Model):
 	created_at = models.DateTimeField(default=timezone.now)
 	modified_at = models.DateTimeField(default=timezone.now)
 
+	# machine metadata
+	current_source_file = models.TextField(null=True)
+	source_machine = models.TextField(null=True)
+
 	def __str__(self):
 		return self.title
 

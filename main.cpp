@@ -20,6 +20,7 @@ void start_dialog() {
 	std::cout << "-a [document] [/path/to/file] : add file to backup list" << std::endl;
 	
 	std::cout << "-c [document] : create document on server" << std::endl;
+	std::cout << "-d [document] : delete document object on server" << std::endl;
 	std::cout << "-f [document] [/path/to/file] : fetch document from server and put it into specified file" << std::endl;
 	std::cout << "-sync : automatically backup all files in config" << std::endl;
 	std::cout << "-restore : restore all files in config" << std::endl;
@@ -56,11 +57,12 @@ int main(int argc, char **argv) {
 
 			while(vr.read_raw(argv[3])) {
 				// keep updating, w/ delay
+				vr.read_metadata(argv[3]);
 				Client cl;
 				cl.set_username(user_config["username"]);
 				
 
-				cl.update(user_config["key"], vr.raw, argv[2], user_config["url"]);
+				cl.update(user_config["key"], vr.raw, argv[2], user_config["url"], vr.host, argv[3]);
 
 				// requires unistd.h, below version is portable
 				//sleep(4);
@@ -71,7 +73,7 @@ int main(int argc, char **argv) {
 			Client f;
 			f.set_username(user_config["username"]);
 			vr.get_final(argv[3]);
-			f.update(user_config["key"], vr.raw, argv[2], user_config["url"]);
+			f.update(user_config["key"], vr.raw, argv[2], user_config["url"], vr.host, argv[3]);
 
 
 			return 0;
@@ -95,7 +97,6 @@ int main(int argc, char **argv) {
 		} else if(strcmp(argv[1],"-a") == 0 && argc == 4) {
 			std::string arg = argv[2];
 			if(!isTitleValid(arg)) {
-
 				return 0;
 			}
 			/*
@@ -123,15 +124,16 @@ int main(int argc, char **argv) {
 					bool swap_is_good = vr.read_raw(user_config["local_files"][i]);
 					if(swap_is_good) { 
 						// keep updating file contents, w/ delay
+						vr.read_metadata(user_config["local_files"][i]);
 						Client cl;
 						cl.set_username(user_config["username"]);
-						cl.update(user_config["key"], vr.raw, user_config["remote_files"][i], user_config["url"]);
+						cl.update(user_config["key"], vr.raw, user_config["remote_files"][i], user_config["url"], vr.host, user_config["local_files"][i]);
 					} else {
 						bool final_is_good = vr.get_final(user_config["local_files"][i]);
 						if(final_is_good) {
 							Client cl;
 							cl.set_username(user_config["username"]);
-							cl.update(user_config["key"], vr.raw, user_config["remote_files"][i], user_config["url"]);
+							cl.update(user_config["key"], vr.raw, user_config["remote_files"][i], user_config["url"], vr.host, user_config["local_files"][i]);
 
 						}
 					}
@@ -178,6 +180,23 @@ int main(int argc, char **argv) {
 			}
 
 			return 0;
+		} else if(strcmp(argv[1],"-d") == 0 && argc == 3) {
+			/*
+			
+			Delete document object on server.
+
+			*/
+
+			// check title length
+			std::string arg = argv[2];
+			if(!isTitleValid(arg)) {
+				return 0;
+			}
+
+			Client c;
+			c.set_username(user_config["username"]);
+			c.delete_document(user_config["key"], argv[2], user_config["url"]);	
+
 		} else {
 			start_dialog();
 			return -1;

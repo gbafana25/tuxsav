@@ -83,6 +83,8 @@ def update(request):
 		# user object and title passed to Document getter
 		doc = Document.objects.get(owner=u, title=jbody['doc_name'])
 		doc.text = jbody["data"]
+		doc.source_machine = jbody["host_name"]
+		doc.current_source_file = jbody["local_name"]
 		# make sure newlines appear in the HTML
 		normalize_newlines(doc.text);
 		
@@ -112,6 +114,25 @@ def create(request):
 
 		return HttpResponse(serv.success(), content_type="application/json")
 	else:
+		return HttpResponse(serv.fail(), content_type="application/json")
+
+# delete document object from server
+
+@csrf_exempt
+def delete_document(request):
+	if request.method != 'POST':
+		return HttpResponse(serv.fail(), content_type="application/json")
+
+	jbody = json.loads(request.body.decode('utf-8'))
+	# check API key
+	if(serv.check_api_key(jbody["key"], jbody["username"])):
+		au = ApiUser.objects.get(name=jbody['username'])
+		u = User.objects.get(username=au.name)
+		doc = Document.objects.get(owner=u, title=jbody['doc_name'])
+		doc.delete()
+
+		return HttpResponse(serv.success(), content_type="application/json")
+	else:	
 		return HttpResponse(serv.fail(), content_type="application/json")
 
 # send document data to client
