@@ -28,6 +28,5 @@ The client is written in C++, and sends data to the server every four seconds
 
 
 ## TODO:
-- combine requests from `-sync` into array of data
 - consider using base64 encoding for file data, either manually or w/ library
 - display elapsed time for modification date

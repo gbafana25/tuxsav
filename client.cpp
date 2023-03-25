@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <cstring>
+#include <vector>
 #include <curl/curl.h>
 
 
@@ -94,6 +95,34 @@ json Client::execute_api_request(std::string fstr) {
 	// return response as json type
 	json rp = json::parse(this->buf);
 	return rp;
+
+}
+
+/*
+
+API - /multi-update 
+request data:
+data: string
+key: string
+username: string
+doc_name: string
+
+addr - base url loaded from settings
+
+*/
+void Client::multi_update(std::string key, std::vector<std::string> data, std::vector<std::string> name, std::string addr, std::string host, std::vector<std::string> local) {
+	this->url = addr+"/multi-update/";
+	json fields;
+	fields["key"] = key;
+	fields["data"] = data;
+	fields["doc_name"] = name;
+	fields["username"] = this->username;
+	fields["host_name"] = host;
+	fields["local_name"] = local;
+	std::string fstr = fields.dump(4);	
+
+	json rp = execute_api_request(fstr);
+	std::cout << rp["status"] << std::endl;
 
 }
 

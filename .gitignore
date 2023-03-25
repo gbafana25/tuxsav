@@ -4,6 +4,7 @@ main
 config.json
 testfile
 fb_local
+testtwo
 
 # Django
 *.sqlite3

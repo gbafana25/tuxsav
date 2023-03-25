@@ -135,6 +135,46 @@ def delete_document(request):
 	else:	
 		return HttpResponse(serv.fail(), content_type="application/json")
 
+# send multiple documents to server
+
+@csrf_exempt
+def multi_update(request):
+	if request.method != 'POST':
+		return HttpResponse(serv.fail(), content_type="application/json")
+
+	jbody = json.loads(request.body.decode('utf-8'))
+	print(jbody)
+	if(serv.check_api_key(jbody["key"], jbody["username"])):
+		# get username from ApiUser object
+		au = ApiUser.objects.get(name=jbody['username'])
+		# use username string to get actual user object
+		u = User.objects.get(username=au.name)
+
+		# user object and title passed to Document getter
+		# loop through and update documents
+			
+		for c in range(0, len(jbody["doc_name"])):
+			doc = Document.objects.get(owner=u, title=jbody["doc_name"][c])
+			doc.text = jbody["data"][c]
+			doc.source_machine = jbody["host_name"]
+			doc.current_source_file = jbody["local_name"][c]
+			# make sure newlines appear in the HTML
+			normalize_newlines(doc.text);
+		
+			# update modification time
+			doc.modified_at = timezone.now()
+			doc.save()
+			
+
+			return HttpResponse(serv.success(), content_type="application/json")
+
+	else:
+		return HttpResponse(serv.fail(), content_type="application/json")
+	
+
+	return HttpResponse(serv.success(), content_type="application/json")
+
+
 # send document data to client
 
 @csrf_exempt

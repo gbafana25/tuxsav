@@ -3,6 +3,7 @@
 #include <string>
 #include <cstring>
 #include <chrono>
+#include <vector>
 #include <thread>
 
 #include "client.hpp"
@@ -119,27 +120,33 @@ int main(int argc, char **argv) {
 			
 			*/
 			while(true) {
+				std::vector<std::string> file_data_vec;
 				for(long unsigned int i = 0; i < user_config["remote_files"].size(); i++) {
 					// Will return false if .swp doesn't exist
 					bool swap_is_good = vr.read_raw(user_config["local_files"][i]);
 					if(swap_is_good) { 
 						// keep updating file contents, w/ delay
 						vr.read_metadata(user_config["local_files"][i]);
-						Client cl;
-						cl.set_username(user_config["username"]);
-						cl.update(user_config["key"], vr.raw, user_config["remote_files"][i], user_config["url"], vr.host, user_config["local_files"][i]);
+						file_data_vec.push_back(vr.raw);
+						
 					} else {
 						bool final_is_good = vr.get_final(user_config["local_files"][i]);
 						if(final_is_good) {
-							Client cl;
-							cl.set_username(user_config["username"]);
-							cl.update(user_config["key"], vr.raw, user_config["remote_files"][i], user_config["url"], vr.host, user_config["local_files"][i]);
+						
+							vr.read_metadata(user_config["local_files"][i]);
+							file_data_vec.push_back(vr.raw);	
 
 						}
 					}
-					std::this_thread::sleep_for(std::chrono::milliseconds(500));
+					//std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
 				}
+				
+				
+				Client cl;
+				cl.set_username(user_config["username"]);
+				cl.multi_update(user_config["key"], file_data_vec, user_config["remote_files"], user_config["url"], vr.host, user_config["local_files"]);
+				
 				// requires unistd.h, below version is portable
 				//sleep(4); 				
 				std::this_thread::sleep_for(std::chrono::milliseconds(4000));
