@@ -5,6 +5,7 @@
 #include <string>
 #include <cstring>
 #include <vector>
+#include <bitset>
 #include <curl/curl.h>
 
 
@@ -12,6 +13,7 @@
 #include "json/json.hpp"
 
 using json = nlohmann::json_abi_v3_11_2::json;
+
 
 /*
 
@@ -40,6 +42,64 @@ Client::Client() {
 	}
 
 }
+
+/*
+
+Encodes communication to base64
+
+*/
+
+std::string Client::base64_encode(std::string w) {
+	/*
+
+	1. Shift over 2 
+	2. Shift 1st over 4 (so it's in leftmost spot), or with 2nd letter shifted 2 right (mask?)
+	3. Mask to isolate last 4 of 2nd letter.  Or with 3rd letter shifted 6 right
+
+	more info: https://ecs.syr.edu/faculty/fawcett/Handouts/cse687/code/Base64Encoding/Base64.cpp
+
+	*/
+
+	std::string set = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+	std::string res;
+	long unsigned int i;
+
+	for(i = 0; i < w.size()-2; i+=3) {
+		std::string sub = w.substr(i, 4);
+		char fi = sub[0] >> 2;
+		char sec = (sub[0] << 4) | (sub[1] >> 4);
+		char thi = ((sub[1] & 0b001111) << 2) | ((sub[2] >> 6) & 0b000011);
+		char fo = sub[2] & 0b111111;
+		
+		std::bitset<6> b1 = fi;
+		std::bitset<6> b2 = sec;
+		std::bitset<6> b3 = thi;
+		std::bitset<6> b4 = fo;	
+
+		res += set[b1.to_ulong()];
+		res += set[b2.to_ulong()];
+		res += set[b3.to_ulong()];
+		res += set[b4.to_ulong()];
+
+	}
+
+	if(i < w.size()) {
+		res += set[w[i] >> 2];
+		if(i < (w.size()-1)) {
+			res += set[(w[i] & 0b000011)<< 4];	
+			res += "=";
+		} else {
+			res += set[(w[i] & 0b000011) << 4 | ((w[i+1] & 0b111100) >> 4)]; 
+			res += "=";
+		}
+
+	}
+	return res;	
+
+
+}
+
 
 /*
 	
@@ -142,7 +202,7 @@ void Client::update(std::string key, std::string data, std::string name, std::st
 	this->url = addr+"/update/";
 	json fields;
 	fields["key"] = key;
-	fields["data"] = data;
+	fields["data"] = this->base64_encode(data);
 	fields["doc_name"] = name;
 	fields["username"] = this->username;
 	fields["host_name"] = host;

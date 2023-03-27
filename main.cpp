@@ -126,15 +126,17 @@ int main(int argc, char **argv) {
 					bool swap_is_good = vr.read_raw(user_config["local_files"][i]);
 					if(swap_is_good) { 
 						// keep updating file contents, w/ delay
+						Client enc;
 						vr.read_metadata(user_config["local_files"][i]);
-						file_data_vec.push_back(vr.raw);
+						file_data_vec.push_back(enc.base64_encode(vr.raw));
 						
 					} else {
 						bool final_is_good = vr.get_final(user_config["local_files"][i]);
 						if(final_is_good) {
 						
+							Client enc;
 							vr.read_metadata(user_config["local_files"][i]);
-							file_data_vec.push_back(vr.raw);	
+							file_data_vec.push_back(enc.base64_encode(vr.raw));	
 
 						}
 					}

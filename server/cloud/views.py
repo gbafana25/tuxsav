@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.utils.text import normalize_newlines
 import uuid
 import json
+import base64
 from . import serv
 
 from .forms import LoginForm
@@ -87,7 +88,7 @@ def update(request):
 		u = User.objects.get(username=au.name)
 		# user object and title passed to Document getter
 		doc = Document.objects.get(owner=u, title=jbody['doc_name'])
-		doc.text = jbody["data"]
+		doc.text = base64.b64decode(jbody["data"]+"=").decode('ascii')
 		doc.source_machine = jbody["host_name"]
 		doc.current_source_file = jbody["local_name"]
 		# make sure newlines appear in the HTML
@@ -148,7 +149,7 @@ def multi_update(request):
 		return HttpResponse(serv.fail(), content_type="application/json")
 
 	jbody = json.loads(request.body.decode('utf-8'))
-	print(jbody)
+	#print(jbody)
 	if(serv.check_api_key(jbody["key"], jbody["username"])):
 		# get username from ApiUser object
 		au = ApiUser.objects.get(name=jbody['username'])
@@ -160,7 +161,7 @@ def multi_update(request):
 			
 		for c in range(0, len(jbody["doc_name"])):
 			doc = Document.objects.get(owner=u, title=jbody["doc_name"][c])
-			doc.text = jbody["data"][c]
+			doc.text = base64.b64decode(jbody["data"][c]+"=").decode('ascii')
 			doc.source_machine = jbody["host_name"]
 			doc.current_source_file = jbody["local_name"][c]
 			# make sure newlines appear in the HTML
@@ -169,9 +170,7 @@ def multi_update(request):
 			# update modification time
 			doc.modified_at = timezone.now()
 			doc.save()
-			
-
-			return HttpResponse(serv.success(), content_type="application/json")
+		
 
 	else:
 		return HttpResponse(serv.fail(), content_type="application/json")

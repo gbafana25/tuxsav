@@ -18,6 +18,7 @@ class Client {
 
 	Client();
 	void set_username(std::string);
+	std::string base64_encode(std::string);
 	std::string get_username();
 	json execute_api_request(std::string);
 	void update(std::string, std::string, std::string, std::string, std::string, std::string);
