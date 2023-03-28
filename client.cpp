@@ -95,6 +95,7 @@ std::string Client::base64_encode(std::string w) {
 		}
 
 	}
+	res += "=";
 	return res;	
 
 

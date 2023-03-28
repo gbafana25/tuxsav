@@ -28,6 +28,12 @@ footer {
 	color: #969387;
 }
 
+.drop-down {
+	display: none;
+	overflow: hidden;
+
+}
+
 
 .description {
 	text-align: center;
@@ -91,4 +97,38 @@ footer {
 
 .doc-container:hover {
 	background-color: #dedede;			
+}
+
+.show-key {
+	transition-duration: 0.5s;
+	outline: none;
+	border: none;
+	border-radius: 8px;
+	font-style: bold;
+}
+
+.show-key:hover {
+	background-color: #000000;
+	color: #ffffff;
+}
+
+.api-key-div {
+	display: none;
+	overflow: hidden;
+}
+
+
+.collapsible {
+	background-color: #ebebeb;
+	transition-duration: 0.5s;
+	outline: none;
+	border: none;
+	border-radius: 8px;
+	font-style: bold;
+}
+
+.collapsible:hover {
+	background-color: #000000;
+	color: #ffffff;
+	font-style: bold;
 }

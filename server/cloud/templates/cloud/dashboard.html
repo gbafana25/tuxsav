@@ -22,14 +22,55 @@
 	{% for d, t in docs %}
 		<div class="doc-container">
 		<a class="doc-link" href="/view/{{d.title}}/"><h3 class="doc-card">{{ d.title }}</h3></a>
+		
 		<p class="doc-info">Last modified: {{ t }}</p>
-		<p class="doc-info">Edited from: {{ d.source_machine }}</p>
-		<p class="doc-info">Local filename: {{ d.current_source_file }}</p>
-		<p class="doc-info">Created: {{ d.created_at }}</p>
+		<button type="button" class="collapsible">...</button>
+		<div class="drop-down">
+			<p class="doc-info">Edited from: {{ d.source_machine }}</p>
+			<p class="doc-info">Local filename: {{ d.current_source_file }}</p>
+			<p class="doc-info">Created: {{ d.created_at }}</p>
 		</div>
+		</div>
+
 	{% endfor %}
+	<script>
+		var coll = document.getElementsByClassName("collapsible");
+		var i;
+
+		for (i = 0; i < coll.length; i++) {
+			coll[i].addEventListener("click", function() {
+		     	this.classList.toggle("active");
+		       	var content = this.nextElementSibling;
+			if (content.style.display === "block"){
+				content.style.display = "none";
+			} else {
+				content.style.display = "block";
+			}
+			});
+		}
+	</script>
 </body>
 
-<h3>API key: {{ key }}</h3>
+<h3>API key: 
+<button type="button" class="show-key" id="show-key">Show API key</button>
+<div class="api-key-div">
+<p>
+{{ key }}
+</p>
+</div>
+</h3>
+
+<script>
+	var k = document.getElementById("show-key");
+	k.addEventListener("click", function() {
+		this.classList.toggle("active");
+		var data = this.nextElementSibling;
+		if(data.style.display === "block") {
+			data.style.display = "none";
+		} else {
+			data.style.display = "block";
+		}
+	});
+</script>
 
 <footer><a class="foot-link" href="https://github.com/gbafana25/tuxsav">Github</a> - &copy; gbafana25 - GNU GPL v3.0</footer>

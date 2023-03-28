@@ -88,8 +88,8 @@ def update(request):
 		u = User.objects.get(username=au.name)
 		# user object and title passed to Document getter
 		doc = Document.objects.get(owner=u, title=jbody['doc_name'])
-		doc.text = base64.b64decode(jbody["data"]+"=").decode('ascii')
-		doc.source_machine = jbody["host_name"]
+		doc.text = base64.b64decode(jbody["data"]).decode('ascii')
+		doc.source_machine = jbody["host_name"].replace(" ", "")
 		doc.current_source_file = jbody["local_name"]
 		# make sure newlines appear in the HTML
 		normalize_newlines(doc.text);
@@ -161,8 +161,8 @@ def multi_update(request):
 			
 		for c in range(0, len(jbody["doc_name"])):
 			doc = Document.objects.get(owner=u, title=jbody["doc_name"][c])
-			doc.text = base64.b64decode(jbody["data"][c]+"=").decode('ascii')
-			doc.source_machine = jbody["host_name"]
+			doc.text = base64.b64decode(jbody["data"][c]).decode('ascii')
+			doc.source_machine = jbody["host_name"].replace(" ", "")
 			doc.current_source_file = jbody["local_name"][c]
 			# make sure newlines appear in the HTML
 			normalize_newlines(doc.text);
