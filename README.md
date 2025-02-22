@@ -22,9 +22,6 @@ The client is written in C++, and sends data to the server every four seconds
 - keep experimenting with offset index
 - in future: could potentially store some of the metadata on the server
 
-## Watch Development Progress
-- [Youtube](https://www.youtube.com/@gbafana25)
-- [Twitch](https://www.twitch.tv/gbafana25)
-
-
 ## TODO:
+- update CSS to html files
+- rewwrite client in C

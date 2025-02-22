@@ -7,12 +7,12 @@
 #include <vector>
 #include <bitset>
 #include <curl/curl.h>
-
+#include <nlohmann/json.hpp>
 
 #include "client.hpp"
-#include "json/json.hpp"
+//#include "json/json.hpp"
 
-using json = nlohmann::json_abi_v3_11_2::json;
+using json = nlohmann::json_abi_v3_11_3::json;
 
 
 /*

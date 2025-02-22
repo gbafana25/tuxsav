@@ -5,13 +5,14 @@
 #include <chrono>
 #include <vector>
 #include <thread>
+#include <nlohmann/json.hpp>
 
 #include "client.hpp"
 #include "swpread.hpp"
 #include "conf.hpp"
-#include "json/json.hpp"
+//#include "json/json.hpp"
 
-using json = nlohmann::json_abi_v3_11_2::json;
+using json = nlohmann::json_abi_v3_11_3::json;
 
 
 void start_dialog() {
@@ -32,7 +33,6 @@ void start_dialog() {
 
 int main(int argc, char **argv) {
 	std::cout << "Starting savebox.." << std::endl;
-
 	VSReader vr;
 	json user_config = vr.load_config();
 	if(argc < 2) {

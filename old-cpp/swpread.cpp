@@ -2,11 +2,13 @@
 #include <iostream>
 #include <ostream>
 #include <cstring>
+#include <nlohmann/json.hpp>
 
 #include "swpread.hpp"
-#include "json/json.hpp"
+//#include "json/json.hpp"
 
-using json = nlohmann::json_abi_v3_11_2::json;
+
+using json = nlohmann::json_abi_v3_11_3::json;
 
 VSReader::VSReader() {}
 
@@ -150,8 +152,9 @@ load config file
 
 */
 json VSReader::load_config() {
-	std::ifstream con("config.json");
+	std::ifstream con("/home/gareth/tuxsav/config.json");
 	json j;
+	std::cout << "Reading Config file" << std::endl;
 	j = json::parse(con);
 	return j;
 
