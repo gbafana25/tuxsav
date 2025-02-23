@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
 
     if(strncmp(argv[1], "-i", 2) == 0) {
         //printf("%s\n", argv[2]);
-        read_raw(".config.json.swp");
+        read_raw(".testfile.swp");
     }
 
 }

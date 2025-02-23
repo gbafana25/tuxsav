@@ -11,12 +11,16 @@ int read_raw(char *file_path) {
     char *buf = (char*)malloc(fsize);
     fread(buf, 1, fsize, f);
     fclose(f);
-    char *content = (char*)malloc(900*sizeof(char));
-    strncpy(content, buf+(fsize-900), 899);
-    for(int i = 0; i < fsize; i++) {
-        fwrite(&buf[i], 1, sizeof(char), stdout);
+    char *content = (char*)malloc(901*sizeof(char));
+    //strncpy(content, buf+(fsize-900), 899);
+    memcpy(content, &buf[fsize-1]-900, 901);
+    for(int i = 0; i < 901; i++) {
+        if(content[i] == '\0' && content[i+1] == '\0') {
+            printf("\n");
+        }
+        fwrite(&content[i], 1, sizeof(char), stdout);
     }
-    printf("%s\n", content);
+    //printf("%s\n", content);
     free(buf);
     free(content);
     return 0;
